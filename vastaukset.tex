@@ -1,0 +1,443 @@
+\documentclass[12pt,leqno,a4paper,oneside]{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{bm}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{hhline}
+\usepackage[parfill]{parskip}
+
+\usepackage{listings}
+\lstset{language=Python}
+\usepackage{color}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\newtheorem{proclaim}{Lause}[section]
+\newtheorem{lemma}[proclaim]{Lemma}
+\newtheorem{corollary}[proclaim]{Seuraus}
+\theoremstyle{definition}
+\newtheorem{definition}[proclaim]{Määritelmä}
+\newtheorem{example}[proclaim]{Esimerkki}
+\newtheorem{exercise}{T.}
+\theoremstyle{remark}
+\newtheorem{remark}[proclaim]{Huomautus}
+\numberwithin{equation}{section}
+\renewcommand{\figurename}{Kuva}
+\pagenumbering{gobble}
+
+\begin{document}
+
+\title{MAB8: Vastaukset}
+\maketitle
+
+\textsc{Vastauksista on spoilereiden välttämiseksi ilmoitettu vain desimaalimuoto. Se ei tarkoita, että desimaalimuoto olisi suositeltavin tapa
+ilmoittaa vastaus. Huomaa myös pyöristysten vaikutus. Mukana on välillä enemmän desimaaleja kuin tarpeeksi, että vastauksista näkisi
+paremmin, onko tehtävä laskettu oikein.}
+
+\exercise{a) $24$  b) $120$ c) $720$.}
+\label{1-1}
+
+\exercise{a) 3 628 800 b) $2.4\cdot 10^18$.}
+
+\exercise{$1.3\cdot 10^12$.}
+\label{1-2}
+
+
+\exercise{a) 241 920 b) 241 920}
+\label{1-3}
+
+\exercise{3 125}
+\label{1-4}
+
+\exercise{10000}
+\label{1-5}
+
+
+\exercise{60}
+
+\exercise{a) 594 823 321 b) 342 014 400}
+
+
+\exercise{a) 10 b) 10 Kysy lukujen merkitystä, jos et ole varma.}
+
+\exercise{a) 210 b) 56.}
+
+\exercise{715}
+
+\exercise{5 148}
+
+\exercise{21}
+
+\exercise{15 380 937}
+\label{lottolkm}
+
+\exercise{0.0769}
+
+\exercise{a) 0.000 000 065 b) 0.000 000 650}
+
+\exercise{a) 0.001 189 b) 0.001231}
+
+\exercise{a) 0.25 b) 0.308 c) 0.019}
+
+\exercise{0.46}
+
+\exercise{0.41, 0.65}
+
+\exercise{0.004 115}
+
+\exercise{0.345}
+
+\exercise{a) 0.030 b) 0.970
+c) $2.08\cdot 10^{-6}$}
+
+\exercise{a) Ei $P\approx 0.167$ b) On $P\approx 0.538$ c) Pienenvät.}
+
+
+\begin{exercise}a) 0.009 653
+b) 0.048
+\end{exercise}
+
+\begin{exercise}
+0.999 023
+\end{exercise}
+
+\begin{exercise}
+0.989 221
+\end{exercise}
+
+\begin{exercise}
+%lotto
+0.781
+\end{exercise}
+
+\begin{exercise}
+ 0. 492 917
+\end{exercise}
+
+\begin{exercise}
+0.602
+\end{exercise}
+
+
+\begin{exercise}
+0.255
+\end{exercise}
+
+
+\begin{exercise}
+0.556
+\end{exercise}
+
+\begin{exercise}
+ a) 0.03215 b) 0.03549
+\end{exercise}
+
+\begin{exercise}
+0.007497
+\end{exercise}
+
+\begin{exercise}
+ a) 0.1675241321
+ b) 0.7655
+ c) 0.1674989533, eroaa 0.000025178
+\end{exercise}
+
+\begin{exercise}a) 0.0821 b) $4.5439\cdot 10^{-21}$ c) $1.6499\cdot 10^{-16}$  
+\end{exercise}
+
+
+
+\section{LibreOffice Calcista}
+
+\begin{exercise}
+  Libreoffice calc opas, libreoffice calc tutorial, libreoffice calc video tutorial, getting started with libreoffice calc,
+  libreoffice calc aloitus, libreoffice calc perusteet
+\end{exercise}
+
+\begin{exercise}
+Kysy, jos jokin mietityttää.
+\end{exercise}
+
+\begin{exercise}
+ c) 14,5 
+ h) 3,25
+\end{exercise}
+
+\begin{exercise}
+ c) todennäköisin 5, epätodennäköisin 0.
+ d) Luku 1 kertoo, että tehtävä on luultavasti laskettu oikein. Muut luvut kertovat, että se on laskettu väärin.
+\end{exercise}
+
+
+\begin{exercise}
+\label{kannatustehtava}
+ a) 0.743484
+ b) 0.644168
+ c) Nettigalluppeihin vastaavat eivät ole satunnainen otos koko väestöstä, ja voivat olla paljonkin vääristyneitä lukijakunnan ja 
+    klikkailuinnon mukaan. Lisäksi samat henkilöt ovat voineet vastata galluppiin monta kertaa.
+\end{exercise}
+
+
+
+
+\begin{exercise}
+%T42
+ Kysy opettajalta/kaverilta, menikö oikein.
+\end{exercise}
+
+\begin{exercise}
+a) 0.9453125 b) 0.989257813
+\end{exercise}
+
+\begin{exercise}
+a) 0.000075083 b) 0.006159
+\end{exercise}
+
+\begin{exercise}
+% T45
+ a) 0.103639
+\end{exercise}
+
+\begin{exercise}
+% T46
+a) 267,5 ja 312,5
+b) 0.958 635
+\end{exercise}
+
+\begin{exercise}
+ a) 7.143 b) 6 c) 7 ja 8
+\end{exercise}
+
+\begin{exercise}
+ 0.707
+\end{exercise}
+
+\begin{exercise}
+% T49
+ A: $\bar{x}=1.5195$, $\sigma=0.0837630587$ B: $\bar{x}=2.5195$, $\sigma=0.0837630587$ C: $\bar{x}=3.5195$, $\sigma=0.0837630587$
+\end{exercise}
+
+\begin{exercise}
+ a) $\bar{x}=3,418$, $\sigma = 0.377$ b) $\bar{x}=3,26$, $\sigma = 0.465$
+\end{exercise}
+
+\begin{exercise}
+ 0.477
+\end{exercise}
+
+\begin{exercise}
+ a) 0.818 b) 148
+\end{exercise}
+
+\begin{exercise}
+ a) 0.04799 b) 0.000429 c) 0.132
+\end{exercise}
+
+\begin{exercise}
+ a) 0.000159 b) 0.336
+\end{exercise}
+
+\begin{exercise}
+ a) 0.4308 b) 0.000108
+\end{exercise}
+
+
+\begin{exercise}
+  a) 1012.36 g
+  b) 0.632
+  c) 990.69 g
+\end{exercise}
+
+\begin{exercise}
+  215.4 cm
+\end{exercise}
+
+
+
+
+\begin{exercise}
+ a) kyllä
+ b) ei
+ c) kyllä
+ d) ei.
+\end{exercise}
+
+
+
+\begin{exercise}
+ a) 141.1818 mmHg, 172.84 cm
+ b) tiedostossa on vain \emph{aikuisten} verenpaineita ja pituuksia, joten se ei ole otos \emph{kaikista} suomalaisista.
+\end{exercise}
+
+\begin{exercise} 
+ a) 68.9\%
+ b) 67.7\%
+ c) 12.9\%
+\end{exercise}
+
+\begin{exercise}
+$\mu= 169.1$ cm, ennuste keskihajonnalle on otoskeskihajonta $\sigma_{n-1} = 9.85$ cm
+\end{exercise}
+
+\begin{exercise}
+$\mu=1.326$ cm, $\sigma_{n-1} = 0.198$ cm.
+\end{exercise}
+
+
+
+\begin{exercise}
+ $[136.70\text{ mmHg }, 150.98\text{ mmHg }]$  
+\end{exercise}
+
+
+\begin{exercise}
+$[131.85\text{ mmHg }, 155.83\text{ mmHg }]$ 
+\end{exercise}
+
+\begin{exercise}
+ a) $[172.7\text{ cm }, 179.3\text{ cm }]$
+ b) $[171.7\text{ cm }, 180.3\text{ cm }]$
+\end{exercise}
+
+
+
+
+\begin{exercise}
+a) $[68.4\%, 74.0\% ]$ 
+b) $[67.5\%, 74.9\% ]$ 
+\end{exercise}
+
+\begin{exercise}
+ Haatainen: $[0.8\%, 3.6\% ]$, Vanhanen $[2.4\%, 6.2\% ]$
+\end{exercise}
+
+
+\begin{exercise} (Tilanne 14.5.2018)
+ a) Perussuomalaiset\\
+ b) $[15.2\%, 54.2\% ]$
+ c) Eivät: vauva-lehden lukijat eivät ole otos koko populaatiosta. (Lisäksi vastaajia on hyvin vähän, jopa niin vähän, ettei 
+ luottamusväliä voisi laskea opetetulla tavalla, mutta se ei ole tämän kurssin asia).
+\end{exercise}
+
+\begin{exercise}
+ a) 0.0387595 b) 0.136798
+\end{exercise}
+
+
+\begin{exercise}
+%T70
+a) 120 b) 2 
+\end{exercise}
+
+
+\begin{exercise}
+ %T71
+ 0.175
+\end{exercise}
+
+\begin{exercise}
+%T72
+ 0-3 oikein, 35/120, 63/120, 21/120 ja 1/120. Todennäköisyys yhteensä 1.
+\end{exercise}
+
+\begin{exercise}
+ %T73
+ 0.940765
+\end{exercise}
+
+\begin{exercise}
+ 0.056895
+\end{exercise}
+
+\begin{exercise}
+0.588235, tn epäonnistua ainakin toisessa 0.32 
+\end{exercise}
+
+\begin{exercise}
+ %T76
+ 0.28
+\end{exercise}
+
+\begin{exercise}
+ %T77
+ 25.2\% alle 200 g, 58.9\% 200-210 g.
+\end{exercise}
+
+\begin{exercise}
+ %T78
+ 0.7358395, 0.641514
+\end{exercise}
+
+\begin{exercise}
+ %T79
+ 0.022750
+\end{exercise}
+
+\begin{exercise}
+ %T80
+ 1.2159$^{\circ}$C
+\end{exercise}
+
+
+\begin{exercise}
+ %R81
+ 100
+\end{exercise}
+
+\begin{exercise}
+ %T82
+On. Odotusarvo on 0.50 euroa.
+\end{exercise}
+
+\begin{exercise}
+ %T83
+ -7 778 pelirahaa.
+\end{exercise}
+
+
+
+
+
+
+
+
+
+
+\end{document}
+

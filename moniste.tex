@@ -1,0 +1,2097 @@
+\documentclass[12pt,leqno,a4paper,oneside]{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{bm}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{hhline}
+\usepackage[parfill]{parskip} 
+\renewcommand{\contentsname}{}
+
+\usepackage{listings}
+\lstset{language=Python}
+\usepackage{color}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\newtheorem{proclaim}{Lause}[section]
+\newtheorem{lemma}[proclaim]{Lemma}
+\newtheorem{corollary}[proclaim]{Seuraus}
+\theoremstyle{definition}
+\newtheorem{definition}[proclaim]{Määritelmä}
+\newtheorem{example}[proclaim]{Esimerkki}
+\newtheorem{exercise}{Tehtävä}
+\theoremstyle{remark}
+\newtheorem{remark}[proclaim]{Huomautus}
+\numberwithin{equation}{section}
+\renewcommand{\figurename}{Kuva}
+\usepackage[figurewithin=section]{caption}
+\title{MAB8: Tilastot ja todennäköisyys II}
+
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\includegraphics[width=13cm]{lops.png}
+
+\newpage
+\section{Kombinatoriikkaa}
+
+Kombinatoriikassa lasketaan, kuinka monella tavalla asioita voidaan järjestää, valita jostakin joukosta tai yhdistellä.
+
+
+\example{Kuinka monessa järjestyksessä kirjaimet A,B,C voidaan kirjoittaa? 
+
+Kokeillaan: \\
+\begin{center}
+ ABC,\\
+ACB,\\ 
+BAC,\\ 
+BCA,\\ 
+CAB,\\ 
+CBA.\\ 
+\end{center}
+Siis kuudella tavalla. 
+
+Huomaa, että kirjaimet kirjoitettiin systemaattisella tavalla: Alku\-kirjaimet käytiin läpi järjestyksessä ja sen jälkeen tulevat kaksi kirjainta
+aina ensin aakkosjärjestyksessä. Tällä tavalla voidaan olla jokseenkin varmoja siitä, ettei mikään mahdollisuus jäänyt huomoimatta.
+
+Lukumäärän voi laskea myös kirjoittamatta yhdistelmiä paperille. Alku\-kirjaimia on kolme, ja jokaisen niistä jälkeen kirjoitetaan kaksi jäljelle
+jäävää kirjainta kummassakin järjestyksessä, yhteensä järjestyksiä on siis $3\cdot2=6$.}
+
+\example{Kuinka monessa järjestyksessä kirjaimet A,B,C,...,M voidaan kirjoittaa? 
+
+Nyt erilaisia kirjainjonoja on liikaa kirjoitettavaksi, mutta voimme
+silti laskea niiden määrän. Ensimmäiseksi kirjaimeksi meillä on 13 vaihtoehtoa. Kun se on kirjoitettu paperille, toinen kirjain voi olla jokin 12:sta
+jäljelle jääneestä. Kolmanneksi kirjaimeksi vaihtoehtoja on 11 jne. Lopulta erilaisten järjestysten lukumääräksi saadaan
+$$13\cdot 12\cdot 11\cdot 10\cdot 9\cdot 8\cdot 7\cdot 6\cdot 5\cdot 4 \cdot 3\cdot 2\cdot 1 = 6227020800 .$$
+Tätä numeroa voidaan merkitä myös lyhyemmin $13!$, luetaan ``kolmentoista kertoma''.
+}
+
+Yleisesti siis:
+\vspace{10pt}
+
+\center\fbox{$n!=n\cdot (n-1)(n-2)\cdots 2\cdot 1.$}
+\center\fbox{$n$ kappaletta esineitä voidaan laittaa $n!$:ään eri järjestykseen.}
+
+\exercise{Laske kynällä ja paperilla a) $4!$  b) $5!$ c) $6!$.}
+\label{1-1}
+
+LibreOfficen taulukkolaskentaohjelmalla esimerkiksi viiden kertoma saadaan kirjoittamalla \texttt{=fact(5)}. TI-Nspirellä se on
+\texttt{5!}.
+
+\exercise{Laske laskimella tai LibreOfficella a) $10!$ b) $20!$.}
+
+\exercise{Kuinka monella eri tavalla kirjaimet F,G,...,S,T voidaan järjestää? Vinkki: laske kirjainten lukumäärä sormilla.}
+\label{1-2}
+
+\example{Kuinka monella tavalla kirjaimet A,B,C,D,E voidaan järjestää siten, että vokaalit tulevat ennen konsonantteja?
+
+Vokaaleja ovat A ja E, ja ne voidaan järjestää kahdella tavalla. Konsonantteja on kolme kappaleta, ja ne voidaan järjestää
+$3!$:lla tavalla. Kirjaimet voidaan siis järjestää vokaalit ensin $2\cdot 3! = 2\cdot 6 = 12 $ tavalla.}
+
+\exercise{Kuinka monella tavalla kirjaimet E,F,G,...,N,O voidaan laittaa järjestykseen niin, että a) vokaalit ovat ennen konsonantteja
+b) konsonantit ovat ennen vokaaleja?}
+\label{1-3}
+
+\vspace{10pt}
+
+Järjestykseen laittamista nimitetään usein \emph{valinnaksi ilman takaisinpanoa}. Ajatus tämän nimityksen takana on, että meillä on vaikkapa numeroituja
+palloja pussissa, josta niitä nostetaan sokkona. Valinnassa ilman takaisinpanoa palloja nostetaan yksitellen, eikä nostettuja palloja laiteta
+takaisin pussiin. 
+\emph{Valinnassa takaisinpanolla} nostetaan pallo, merkitään ylös sen numero, ja laitetaan se pussiin ennen seuraavaa nostoa. Eri tulosten määrän laskeminen
+valinnassa takaisinpanolla on helppoa: ensimmäisessä nostossa on $n$ vaihtoehtoa, toisessa on $n$ vaihtehtoa jne. Yhteensä vaihtoehtoja on siis
+$n\cdot n\cdots n$ kappaletta.
+
+\center\fbox{$n$:stä pallosta voidaan nostaa $k$ kappaletta takaisinpanolla $n^k$ eri tavalla.}
+
+\exercise{Montako viisikirjaimista sanaa voidaan muodostaa kirjaimista A,B,C,D,E? Sanojen ei tarvitse tarkoittaa mitään, eli esimerkiksi
+DCCDC kelpaa sanaksi.}
+\label{1-4}
+
+\exercise{Montako nelinumeroista pin-koodia on olemassa?}
+\label{1-5}
+
+\vspace{10pt}
+\textsc{Vaikeampi osio alkaa.} Tämän täydellinen ymmärtäminen ei ole ensisijaisen tärkeää, mutta siitä on kyllä hyötyä.
+\vspace{10pt}
+\example{(Perustuu tositapahtumiin). Oppilas on unohtanut kaappinsa tunnusluvun. Kaksi tunnusluvun numeroista on samoja, ja loput eivät. Montako erilaista
+yhdistelmää numeroista saa?
+
+Tätä esimerkkiä voi lähestyä monella tavalla, kuten useimpia toden\-näköisyys\-laskennan kysymyksiä. Intuitiivisin tapa, ja myös käytännössä hyödyllisin on 
+valita ensin kahden saman luvun paikat ja sitten laittaa loput kaksi numeroa paikoilleen. Merkitään numeroita A,A,B ja C. Tällöin A:n paikat olisivat:\\
+\begin{center}
+AAXX\\
+AXAX\\
+AXXA\\
+XAAX\\
+XAXA\\
+XXAA\\
+\end{center}
+
+Jokaisella rivillä B ja C voidaan laittaa paikoilleen kahdella eri tavalla, joten erilaisia yhdistelmiä tulisi 12 kappaletta. Tämä menetelmä auttaa
+meitä myös eri yhdistelmien läpikäynnissä.
+
+Toista tapaa varten kuvitellaan, että A:t voitaisiin jotenkin erottaa toisistaan, ja että kaikki mahdolliset yhdistelmät olisi kirjoitettu paperille:\\
+\begin{center}
+A$_1$A$_2$BC,\\ 
+A$_1$A$_2$CB\\
+A$_1$BA$_2$C\\
+A$_1$CA$_2$B,\\
+...
+\end{center}
+
+Nyt meillä on $4!=24$ kappaletta neljän numeron/kirjaimen yhdistelmiä paperilla. Koska A$_1$ ja A$_2$ ovat kuitenkin oikeasti samoja, on jokainen
+yhdistelmä kirjoitettu kaksi kertaa, eli uniikkeja yhdistelmiä on $24/2=12$ kappaletta.
+}
+
+\vspace{10pt}
+
+Jälkimmäinen tapa yllä mainituista voi olla monesti käytännöllisempi. Suurilla luvuilla on järkevää ensin laskea, onko ylipäänsä mahdollista käydä
+kaikkia vaihtoehtoja läpi. Toisaalta tällä tavalla voidaan varmistaa, ettei vaihtoehtoja ole unohtunut, ja lisäksi todennäköisyyslaskennassa usein
+ollaan kiinnostuneita vain vaihtoehtojen lukumäärästä.
+
+\example{Montako anagrammia sanasta PAPPA voidaan muodostaa, jos anagrammien ei tarvitse tarkoittaa mitään?
+
+Voitaisiin käydä kaikki vaihtoehdot läpi, mutta on nopeampikin tapa. Ajatellaan aluksi, että kirjaimet ovat kaikki erilaisia:
+P$_1$A$_1$P$_2$P$_3$A$_2$ . Ne voidaan kirjoittaa paperille $5!=120$ tavalla. Kuvitellaan, että olemme kirjoittaneet ne paperille.
+Jos alaindeksit pyyhitään pois, osa anagrammeista on samoja, esimerkiksi 
+P$_1$P$_2$A$_1$P$_3$A$_2$ = P$_2$P$_1$A$_2$P$_3$A$_1$. Sanat ovat
+muuten samoja, mutta eri P:t ja eri A:t ovat niissä vain eri järjestyksessä. 
+
+Nyt ongelma on siis se, kuinka monta kertaa kukin sana esiintyy. Mietitään, kuinka monella tavalla alaindeksit voitaisiin kirjoittaa takaisin sanaan
+PPAPA. 
+P-kirjaimien alaindekseille on $3!=6$ eri järjestystä ja A-kirjaimien 2, joten jokainen sana esiintyy indeksittömässä listassa siis $6\cdot 2 = 12$ kertaa.
+
+Erilaisia sanoja on siis	
+$$\frac{120}{6\cdot 2} = 10 \text{ kappaletta.}$$
+
+Tätäkin esimerkkiä voidaan lähestyä monella tavalla. Voitaisiin vaikka kirjoittaa ensin paperille kolme P:tä ja sitten miettiä, monellako tavalla A:t
+voidaan laittaa niiden väliin ja sivuille. Ota kynä ja paperia esille ja kokeile. Jos A:t laitetaan sanaan vierekkäin, niille on neljä mahdollista paikkaa.
+Mieti sitten, monellako tavalla A:t voidaan laittaa, jos ne eivät ole vierekkäin.
+}
+
+\exercise{Kuinka monta anagrammia sanasta SAAPAS voidaan muodostaa, jos sanojen ei tarvitse tarkoittaa mitään?}
+
+\vspace{10pt}
+\textsc{Vaikeampi osio päättyy.}
+
+\vspace{10pt}
+
+\example{Nostetaan korttipakasta viisi korttia. Monellako tavalla kortit voidaan nostaa, jos nostojärjestyksellä on väliä?
+
+
+Ensimmäinen kortti voi olla mikä tahansa pakan 52:sta eri kortista. Toinen kortti voi olla mikä tahansa 51:stä jäljellä olevasta, ja niin edelleen, kunnes
+viides kortti voi olla mikä tahansa 48 jäljellä olevasta. Eri vaihtoehtoja on siis
+$$52\cdot 51\cdot 50 \cdot 49 \cdot 48 = 311 875 200 \text{ kappaletta. }$$}
+
+Tässä esimerkissä on kaksi erityisen huomionarvoista asiaa: 1) viidennelle kortille ei ole 52-5 eri vaihtoehtoa, vaan 52-4, koska pakasta on poistettu sitä 
+nostettaessa vasta neljä korttia. Tällaiset yhden kortin laskuvirheet ovat hyvin yleisiä. 2) Haluttu luku voidaan esittää muodossa
+$$\frac{52!}{(52-5)!} = \frac{52!}{47!}.$$
+
+\vspace{10pt}
+\center\fbox{$k$:n esineen valinta $n$:stä ilman takaisinpanoa voidaan tehdä $\frac{n!}{(n-k)!}$ tavalla.}
+\vspace{10pt}
+
+\exercise{Pussissa on 29 palloa, joissa jokaisessa on eri kirjain. Niistä muodostetaan satunnainen sana nostamalla kuusi palloa yksi kerrallaan.
+Kuinka monta erilaista sanaa voidaan saada, jos a) pallot laitetaan noston jälkeen takaisin pussiin, b) palloja ei laiteta noston jälkeen
+takaisin pussiin?}
+
+\example{Kuinka monta erilaista viiden kortin kättä voidaan nostaa korttipakasta? 
+
+Tämä tehtävä poikkeaa aiemmasta sillä tavalla, että korttien
+nosto\-järjestyksellä ei ole väliä. Voimme lähestyä ongelmaa samalla tavalla kuin PAPPA-sanan anagrammeja. Ajatellaan, että meillä
+on lueteltuna kaikki edellisen esimerkin 311875200 eri tapaa nostaa viisi korttia pakasta. Tässä luettelossa jokainen käsi on mainittu monta kertaa, 
+koska sama käsi on saatu
+nostamalla kortit eri järjestyksessä. 
+
+Jokainen viiden kortin käsi voidaan nostaa $5!=120$ eri järjestyksessä, joten jokainen käsi on kirjoitettu
+luetteloon 120 kertaa. Erilaisia käsiä on siis
+$$\frac{311875200}{120} = 2598960 \text{ kappaletta.}$$}
+
+Tästä esimerkistä saadaan yleisempikin sääntö. Kortteja voitiin nostaa $$\frac{52!}{(52-5)!}$$ eri tavalla järjestyksessä, ja kun tämä 
+lukumäärä jaettiin samanlaisten
+käsien lukumäärällä, saatiin $$\frac{52!}{(52-5)! 5!} .$$
+
+Esimerkin logiikka ei tietenkään rajoitu korttipakkaan. Jos vaikka 20 henkilön luokasta pitäisi valita neljä henkilöä, voitaisiin heidät valita
+järjestykessä $20!/16!$ eri tavalla, ja kun järjestys jätettäisiin huomioimatta, olisi erilaisia valintatapoja $20!/(16!4!)$ kappaletta.
+
+\vspace{10pt}
+\center\fbox{$n$:stä esineestä voidaan valita $k$ kappaletta $\frac{n!}{k! (n-k)!}$ :llä eri tavalla.}
+\vspace{10pt}
+
+Tämä on tärkeä asia, ja siksi tälle luvulle on oma merkintä:
+\vspace{10pt}
+\center\fbox{${n \choose k} := \frac{n!}{k! (n-k)!}$}
+\vspace{10pt}
+
+Vasemmalla oleva merkintä luetaan ``än yli koon''.
+
+\exercise{Laske kynällä ja paperilla a) ${5\choose 2}$ b) ${5\choose 3}$. Mitä nämä luvut merkitsevät?}
+
+LibreOfficen taulukkolaskentaohjelmalla esimerkiksi ${5\choose 3}$ lasketaan \texttt{=combin(5,3)}, Nspirellä \texttt{nCr(5,3)}.
+
+\exercise{Laske koneella a) ${10\choose 4}$ b) ${8\choose 3}$.}
+
+\exercise{Montako neljän kortin kättä voidaan nostaa korttipakan hertoista?}
+
+\exercise{(Vaikeahko). Kuinka monessa viiden kortin kädessä kaikki kortit ovat samaa maata?}
+
+\exercise{Heitetään kahta noppaa (kuten esim. Monopolissa tai backgammonissa). Jos tulos on vaikkapa 2 ja 6, on samantekevää, kumpi
+noppa on kakkonen ja kumpi kutonen. Montako erilaista tulosta voidaan saada? (Tätä varten kannattaa piirttää jonkinlainen taulukko silmä\-luvuista).}
+
+\exercise{Lotossa arvotaan 39:stä numerosta 7 voittonumeroa. Kuinka monta erilaista lottoriviä on olemassa? (Unohdetaan lisänumerot toistaiseksi)}
+\label{lottolkm}
+
+Lopuksi vielä, koska $n$:stä esineestä voidaan valita $n$:n esineen joukko tasan yhdellä tavalla, ja toisaalta
+$${n \choose n} = \frac{n!}{0! n!} ,$$
+haluamme määritellä, että $0!=1.$
+
+
+\section{Todennäköisyyslaskentaa}
+
+\subsection{Kaikki vaihtoehdot yhtä todennäköisiä}
+
+\hspace{10pt}
+
+Todennäköisyydestä puhutaan usein arkikielessä prosentteina. Esimerkiksi kolikonheitossa sanottaisiin kruunan todennäköisyyden olevan 50\%.
+Ma\-te\-ma\-tii\-kas\-sa käytetään todennäköisyyksinä välin $[0,1]$ reaalilukuja siten, että $1$ tarkoittaa varmaa tapahtumaa, $0$ mahdotonta, ja kruunan
+todennäköisyys olisi $0.5$. Laskuissa on parempi käyttää murtolukuja, jos desimaalit eivät lyhyesti ja tarkasti ilmoita lukua. Esimerkiksi luvulle
+$\frac{1}{10}$ on aivan ok käyttää desimaaliesitystä, mutta luvulle $\frac{1}{7}$ ei. Vastauksessa kannattaa kuitenkin kertoa myös desimaalilikiarvo,
+koska siitä näkee suoraan suuruusluokan.
+
+Yllä käytännössä jo kerrottiin todennäköisyyksien ensimmäinen periaate: jos vaihtoehtoja on $n$ kappaletta, ja kaikki ovat yhtä todennäköisiä, niin
+yhden vaihtoehdon todennäköisyys on $1/n$.
+
+\begin{example}
+ Heitetään noppaa kerran. Todennäköisyys sille, että silmäluku on 3, on $1/6\approx 0.167.$
+\end{example}
+
+\begin{example}
+ Nostetaan kortti hyvin sekoitetusta korttipakasta. Toden\-näköisyys sille, että kortti on patanelonen on $1/52\approx 0.0192.$
+\end{example}
+
+\begin{example}
+ Nostetaan kortti hyvin sekoitetusta pakasta. Mikä on todennäköisyys sille, että kortti on pata?
+ 
+ Ensimmäinen tapa laskea tämä olisi, että maita on neljä kappaletta, joten todennäköisyys on $1/4 = 0.25.$ 
+ 
+ Toinen tapa on laskea kaikkien patojen määrä ja jakaa se kaikkien korttien määrällä: $13/52 = 1/4 = 0.25.$ Tulos on tietenkin sama laskutavasta riippumatta.
+\end{example}
+
+\begin{example}
+ Pakasta on nostettu patanelonen, eikä sitä ole palautettu pakkaan. Millä todennäköisyydellä seuraava kortti on pata?
+ 
+ Nyt ei voida laskea maiden määrän perusteella, että todennäköisyys olisi $1/4$, sillä patoja on pakassa vähemmän kuin muita maita. Sen sijaan voidaan laskea,
+ että patoja on jäljellä 12 kappaletta ja kortteja 51, joten todennäköisyys on $12/51 = 4/17 \approx 0.235.$
+\end{example}
+
+\exercise{Pakasta nostetaan satunnainen kortti. Millä todennäköisyydellä se on ässä?}
+
+\exercise{Millä todennäköisyydellä yksi rivi voittaa lotossa? (Käytä tehtävää \ref{lottolkm} apuna). b) Matti on pelannut kymmenen eri riviä
+lottoa. Millä todennäköisyydellä hän saa täysosuman?}
+
+\exercise{Annelilla on pussissa 29 palloa, joissa jokaisessa on eri kirjain. Hän arpoo kaksikirjaimisen sanan. Millä todennäköisyydellä sana on ``EU'',
+jos a) hän palauttaa ensimmäisen pallon pussiin noston jälkeen b) ei palauta sitä?}
+
+\subsection{Sanastoa ja merkintöjä}
+
+\hspace{10pt}
+
+Todennäköisyysksiä lasketaan \textsc{tapahtumille}. Tapahtuma voi olla esi\-merkiksi se, että kolikko on kruuna, tai kortti on pata.
+Jos tapahtuma ei koostu ``pienemmistä'' tapahtumista, se on \textsc{alkeistapaus}. Esi\-merkiksi tapahtuma ``kortti on pata'' koostuu tapahtumista
+``kortti on pataässä, patakakkonen, ..., patarouva tai patakuningas''. Kyseessä ei siis ole alkeistapaus. ``Kortti on patanelonen'' sen sijaan on 
+alkeistapaus, koska sitä ei voi jakaa pienempiin osiin.
+
+Periaatteessa todennäköisyyksiä varten pitäisi aina määrittää ensin mahdolliset tapahtumat jne., mutta yleensä ne ovat itsestäänselviä. Lisäksi
+niiden kunnollinen käsittely edellyttäisi aika pitkällekin menevää matematiikkaa, ja on omiaan sekottamaan oppilaita, joten ei tuhlata siihen nyt aikaa.
+Usein tapahtumat eivät kata kaikkia todellisia mahdollisuuksia, esimerkiksi kolikon kyljelleen jäämistä, mutta nämä mahdollisuudet voidaan ohittaa, jos
+ajatellaan, että kolikonheitto tällaisissa tapauksissa uusitaan niin kauan, kunnes saadaan kelvollinen tulos.
+
+Tapahtuman todennäköisyyttä merkitään $P(\text{Kortti on pata}).$ 
+
+Jos tarkastellaan esimerkiksi tapahtumaa ``kortti on pata'', sanotaan alkeistapauksia, jotka tyydyttävät tämän ehdon, \textsc{suotuisiksi}. Siksi yllä käytetty
+todennäköisyyksien laskutapa ilmoitetaan usein
+$$P(A) = \frac{\text{Suotuisten tapausten lukumäärä}}{\text{Kaikkien tapausten lukumäärä}} .$$
+Huomaa, että sanalla suotuisa tarkoitetaan vain, että kysytty tapahtuma tapahtuu. Jos tehtävänä on laskea 6-oikein tuloksen todennäköisyys lotossa,
+ei tulos 7-oikein ole suotuisa, vaikka lottoaja sitä sellaisena varmaan pitäisikin.
+
+Joskus kannattaa nimetä tapahtumia kirjaimilla.
+\exercise{
+Sovitaan, että 
+$$A=\text{kortti on pata, ja}$$
+$$B=\text{kortti on nelonen.}$$
+Laske todennäköisyydet
+\begin{itemize}
+ \item[a)]
+ $P(A)$
+ \item[b)]
+ $P(A\text{ tai } B)$
+ \item[c)]
+ $P(A\text{ ja } B)$?
+\end{itemize}
+}
+
+
+\subsection{Jotkut vaihtoehdot ovat todennäköisempiä kuin toiset}
+
+\vspace{10pt}
+
+Todennäköisyys ei riipu aina vain vaihtoehtojen lukumäärästä. Jos juoksisin kilpaa Usain Boltin kanssa, mahdollisia lopputuloksia
+olisi (ainakin teoriassa) kaksi: minä voitan tai Bolt voittaa. Vaihtoehtojen todennäköisyydet eivät kuitenkaan ole samat.
+
+Jos vaihtoehtoja on äärellinen määrä, ja niiden todennäköisyydet eivät ole samat, pitää seuraavien kuitenkin olla totta:
+\begin{itemize}
+ \item 
+ Kaikkien vaihtoehtojen todennäköisyyksien summa on 1.
+ \item
+ Jos tapahtuma $A$ koostuu tapahtumista $a_1 , a_2, \ldots ,a_n$, niin 
+ $$P(A) = P(a_1 ) + P(a_2 ) +\ldots +P(a_n ) .$$ 
+\end{itemize}
+
+\begin{example}
+ Uhkapelurilla on huijausnoppa, jonka todennäköisyydet silmäluvuille ovat nämä:
+ 
+ \begin{center}
+ \begin{tabular}{l|l}
+  Silmäluku & P\\
+  \hline
+  1 & 0\\
+  2 & 0.1 \\
+  3 & 0.2 \\
+  4 & 0.2 \\
+  5 & 0.2 \\
+  6 & 0.3.
+ \end{tabular}
+ \end{center}
+
+ Nämä todennäköisyydet ovat mahdolliset, koska 
+ $$P(0) + P(1) + P(2) + P(3) + P(4) + P(5) + P(6) = 0 + 0.1 + 0.2 + 0.2 + 0.2 + 0.3 =1.$$
+ Tässä $P(5)$ tarkoittaa tapahtumaa ``silmäluku on vitonen'' jne.
+ 
+ Todennäköisyys vaikkapa parittomalle silmäluvulle voidaan laskea näin:
+ $$P(\text{pariton} ) = P(1)+P(3)+P(5) = 0 + 0.2 + 0.2 = 0.4$$
+ 
+\end{example}
+
+\exercise{Jos kolikonheitossa kruunan todennäköisyys on 0.54, mikä on klaavan todennäköisyys?}
+
+\exercise{Pelurin nopan todennäköisyydet silmäluvuille 1-5 ovat seuraavan taulukon mukaisia:
+
+
+ \begin{center}
+ \begin{tabular}{l|l}
+  Silmäluku & P\\
+  \hline
+  1 & 0.15\\
+  2 & 0.03 \\
+  3 & 0.11 \\
+  4 & 0.21 \\
+  5 & 0.09 \\
+ \end{tabular}
+ \end{center}
+
+ Millä todennäköisyydellä hän heittää kutosen? Millä todennäköisyydellä heiton tulos on parillinen?
+}
+
+\subsection{Laskusääntöjä}
+
+\hspace{10pt}
+
+\fbox{Peräkkäisten tapahtumien todennäköisyydet saadaan kertomalla.}
+
+\begin{example}
+ Kolikko heitetään kolme kertaa. Millä toden\-näköisyydellä kaikki heitot ovat kruunia?
+ 
+ Vastaus:
+ $$P(\text{kruuna, kruuna, kruuna}) = 0.5\cdot 0.5 \cdot 0.5 = 0.125.$$
+ 
+ Tämä vastaa myös arkijärkeä. Kuvitellaan, että kolikko heitettäisiin vaikka tuhat kolmen sarjaa. Puolessa niistä voisi olettaa ekan heiton
+ olevan kruuna. Näistä sarjoista taas puolet olisi sellaisia, että toinenkin heitto olisi kruuna, ja niistä puolet sellaisia, joissa kolmas on kruuna.
+\end{example}
+
+\begin{example}
+ Pakasta nostetaan viiden kortin käsi. Millä toden\-näköisyydellä kaikki kortit ovat herttaa?
+ 
+ Tämän voi ajatella myös peräkkäisinä tapahtumina. Nostetaa kortti kerralla, ja kysytään todennäköisyyttä sille, että jokainen nostettu kort\-ti
+ on hertta. Nyt kuitenkin todennäköisyys hertan nostamiselle muuttuu jokaisen nostetun kortin myötä:
+ \begin{align*}
+ P(\text{kaikki herttaa}) &= P(H_1)\cdot P(H_2)\cdot P(H_3)\cdot P(H_4)\cdot P(H_5)\\
+ &= \frac{13}{52}\cdot\frac{12}{51}\cdot\frac{11}{50}\cdot\frac{10}{49}\cdot\frac{9}{48} \approx 0.000 495
+ \end{align*}
+ Tässä $H_2$ esimerkiksi tarkoittaa, että toinen nostettu kortti on hertta.
+\end{example}
+
+Huomionarvoista on se, että ylläoleva kertolasku voidaan kirjoittaa toisellakin tavalla:
+$$\frac{13}{52}\cdot\frac{12}{51}\cdot\frac{11}{50}\cdot\frac{10}{49}\cdot\frac{9}{48} = \frac{13!}{8!} \frac{47!}{52!} .$$
+Tästä on ensinäkin hyötyä joskus laskinta näppäiltäessä, mutta tämä vihjaa myös toiseen tapaan ajatella tehtävä: erilaisia viiden kortin käsiä
+on ${52 \choose 5}$ kappaletta. Erilaisia viiden kortin herttakäsiä taas on ${13 \choose 5}$ kappaletta. Niinpä herttakäden todennäköisyys on
+$$\frac{{13 \choose 5}}{{52 \choose 5}} = \frac{13!}{8!\, 5!} : \frac{52!}{5! 47!} = \frac{13!\, 5! \, 47!}{8!\, 5!\, 52!} .$$
+Koska $5!$ supistuu pois, tästä saadaan sama todennäköisyys kuin ensimmäisellä laskutavalla.
+
+\exercise{Heitetään viittä noppaa. Millä todennäköisyydellä ei saada vitosta pienempiä silmälukuja?}
+
+\exercise{Korttipakasta nostetaan kuusi korttia. Millä toden\-näköisyydellä kaikissa on eri numero/kirjain?}
+
+\exercise{Uhkapeluri seuraa lottoarvontaa, jossa nostetaan 39:stä numerosta 7 voittonumeroa. Hän on saanut kuusi ensimmäistä numeroa oikein.
+a) Mikä on todennäköisyys, että seitsemäs numero on oikein? b) Mikä on todennäköisyys, että seitsemäs numero on väärin?
+c) Mikä on todennäköisyys ennen arvontaa, että kuusi ensimmäistä arvottua numeroa tulevat osumaan pelurin riviin, mutta seitsemäs ei?}
+
+\exercise{Opettaja lyö vetoa, että luokassa on oppilaita, joilla on sama syntymäpäivä (syntymävuosi voi olla eri). 
+Oleta, että jokaisessa vuodessa on 365 päivää.
+Onko veto opettajan kannalta järkevä, jos oppilaita on a) 12 b) 24? c) Jos karkausvuodet huomioidaan, pieneneekö vai suureneeko
+opettajan voitonmahdollisuudet?}
+
+Seuraavat säännöt on aika helppo nähdä todeksi, ja osaa niistä on jo käytettykin:
+\begin{center}
+ \fbox{$P(\text{ei-}A) = 1-P(A)$}
+ 
+ \fbox{$P(A \text{ tai } B) = P(A) + P(B) - P(A \text{ ja } B).$}
+\end{center}
+Tässä ei-$A$ on nimeltään tapahtuman $A$ \textsc{komplementti}. Jos esi\-merkiksi $A$= ``kortti on pata'', niin ei-$A$ on
+``kortti ei ole pata'', eli ``kortti on hertta, ruutu tai risti''. Huomaa, että komplementti \emph{ei} ole tapahtuman $A$ vastakohta.
+Esimerkiksi lotossa tapahtuman ``7 oikein'' komplementti ei ole ``0 oikein'', vaan ``0-6 oikein''.
+
+Toinen tärkeä asia on, että matematiikassa ``$A$ tai $B$'' sisältää myös tapauksen ``$A$ ja $B$''. Arkikielessähän ``tai'' tarkoittaa usein,
+että pitää valita tasan yksi vaihtoehdoista.
+Esimerkiksi patanelonen sisältyy
+tapahtumaan ``kortti on pata tai nelonen''. Toinen ylläolevista laskusäännöistä tuleekin tästä, patanelonen on laskettu kaksi kertaa 
+mukaan toden\-näköisyyteen $P(A) + P(B)$, joten toinen tapaus pitää miinustaa pois.
+
+\begin{example}
+ Noppaa heitetään kaksi kertaa. Millä todennäköisyydellä ainakin toinen silmäluvuista on kutonen?
+ 
+ Tämän voi laskea kahdella tavalla. Merkitään aluksi $K_1$= ``Eka heitto on kutonen'' ja $K_2$= ``toka heitto on kutonen''.
+ Nyt
+ \begin{align*}
+  P(\text{ainakin yksi kutonen} ) &= P(K_1) + P(K_2) - P(K_1 \text{ ja } K_2 )\\
+  &= \frac{1}{6} + \frac{1}{6} - \frac{1}{36} = \frac{11}{36} .
+ \end{align*}
+ 
+ Toinen tapa on käyttökelpoinen hyvin monissa tilanteissa:
+ Todennäköisyys sille, että kummallakaan nopalla ei saada kutosta on 
+ $$\frac{5}{6}\cdot\frac{5}{6} = \frac{25}{36} .$$
+ Tällöin todennäköisyys sille, että toisella saadaan kutonen, on oltava $1-\frac{25}{36} = \frac{11}{36} .$
+ Tämän voi pukea fiinimpäänkin muotoon:
+ \begin{align*}
+  P(\text{ainakin yksi kutonen} ) &= P(\text{ei-(molemmilla nopilla 1,2,3,4,5)} )\\
+  &= 1-P(\text{molemmilla nopilla 1,2,3,4,5} ) \\
+  &= 1- \frac{5}{6}\cdot \frac{5}{6} \\
+  &= 1- \frac{25}{36} = \frac{11}{36} .
+ \end{align*}
+ 
+\end{example}
+
+\begin{exercise}
+Helsingissä oli 628 208 asukasta 1.1.2017. Heistä 105 240 oli alaikäisiä ja 36 197:n äidinkieli oli ruotsi. Oleta, että äidinkielellä
+ja henkilön iällä ei ole riippuvuutta (ts. ruotsinkielisten osuus kaikissa ikäluokissa on yhtä suuri). 
+Millä todennäköisyydellä sattumanvaraisesti valittu helsinkiläinen on a) ruotsinkielinen ja alaikäinen
+b) ruotsinkielinen ja täysikäinen?\footnote{\url{https://www.hel.fi/hel2/tietokeskus/julkaisut/pdf/17_06_28_Tilastoja_1_Maki_Vuori.pdf}} 
+\end{exercise}
+
+\begin{exercise}
+ Peluri heittää kolikko kymmenen kertaa. Mikä on toden\-näköisyys, että hän saa ainakin yhden kruunan?
+\end{exercise}
+
+\begin{exercise}
+ Pelurin kolikko laskeutuu klaava ylöspäin todennäköisyydellä $0.53$. Millä toden\-näköisyydellä hän saa kuudella heitolla ainakin yhden klaavan?
+\end{exercise}
+
+
+\begin{exercise}
+ Lotossa arvotaan 39:stä numerosta 7, ja sitä pelataan 7 numeron rivillä. Mikä on todennäköisyys, että rivissä on ainakin yksi numero oikein?
+\end{exercise}
+
+\begin{exercise}
+ Korttipakasta nostetaan viiden kortin käsi. Millä toden\-näköisyydellä ainakin kahdessa kortissa on sama numero/kirjain?
+\end{exercise}
+
+\begin{exercise}
+ Korttipakasta nostetaan kolme korttia. Millä toden\-näköisyydellä ainakin kaksi niistä on samaa maata?
+\end{exercise}
+
+
+Lopuksi vielä, kun nostettaan kortteja pakasta, ja aiemmat nostot vaikuttavat myöhempiin tapahtumiin, voidaan sanoa esimerkiksi, että
+$\frac{12}{51}$ on \emph{ehdollinen todennäköisyys} sille, että toinen nostettu kortti on hertta ehdolla, että ensimmäinen oli. Tätä merkitään
+$P(H_2 | H_1 ) = \frac{12}{51} .$ 
+
+Ehdollisen todennäköisyyden ei tarvitse liittyä peräkkäisiin tapahtumiin tai aikaan. Voidaan esimerkiksi laskea ehdollinen todennäköisyys sille,
+että heitetään nopalla kutonen, ehdolla, että heitto on parillinen. Koska parillisia numeroita on kolme kappaletta, on 
+$$P(6|\text{parillinen}) = \frac{1}{3}.$$
+
+Yleisesti ehdollinen todennäköisyys lasketaan tällä tavalla:
+\begin{center}
+ \fbox{$P(A|B)=\frac{P(A\text{ ja } B)}{P(B)}$, kun $P(B)> 0.$}
+\end{center}
+\textbf{Tätä kaavaa ei tarvitse kuitenkaan osata tai ymmärtää.} Tällä kurssilla riittää, että ymmärrät perusajatuksen ehdollisesta todennäköisyydestä:
+patanelosen todennäköisyys on eri kuin patanelosen todennäköisyys ehdolla, että pakasta on jo nostettu kortti.
+
+\begin{exercise}
+ Mikä on todennäköisyys sille, että toinen pakasta nostettu kortti on pata ehdolla, että ensimmäinen oli hertta?
+\end{exercise}
+
+
+\begin{exercise}
+ Laske todennäköisyys sille, että kahden nopan heitolla saadaan ainakin yksi kutonen ehdolla, että molemmat silmäluvut ovat parillisia.
+\end{exercise}
+
+
+\section{Toistokoe ja binomitodennäköisyydet}
+
+\textsc{Toistokokeessa} tehdään sama asia monta kertaa, ja lasketaan tulosten lukumäärä. Esimerkkejä toistokoeista:
+\begin{itemize}
+ \item 
+ Heitetään kolikkoa sata kertaa ja lasketaan kruunien määrä. Tämä voisi olla esimerkiksi uhkapeli, jossa peluria kiinnostaa vain,
+ kuinka monesti hän voittaa.
+ \item
+ Pudotetaan voileipä tuhat kertaa pöydältä ja lasketaan kuinka monta kertaa se putoaa voipuoli ylöspäin. Tämä voisi olla tie\-teel\-li\-nen koe,
+ jossa selvitetään putoaako voileipä useammin voipuoli ylöspäin. Minkään yksittäisen pudotuksen tuloksella ei ole väliä, ainoastaan lukumäärällä
+ kokeen lopussa. 
+ \item
+ Arvataan kokeen monivalintatehtävässä vastaus jokaiseen kohtaan. Jos kaikkien tehtävien pisteytys on sama, tämä on toistokoe. Oppilasta ei
+ kiinnosta, mihin tehtävään hän on valinnut oikein, vaan ainoastaan pisteet, joita hän saa. 
+ \item
+ Kuljetaan junassa pummilla sama väli joka päivä kuukauden ajan. Tässä voitaisiin olla kiinnostuneita vain siitä, onko pummilla kulkeminen halvempaa
+ kuin matkakortin ostaminen.
+ \item
+ Pelataan rivi lottoa joka viikko vuoden ajan. Pelaajaa voi esimerkiksi kiinnostaa, kuinka paljon hän voi odottaa tekevänsä tappiota tällä tavalla.
+\end{itemize}
+
+Seuraava esimerkki kertoo oleellisimman asian toistokokeista:
+
+\begin{example}
+ Pelurilla on kolikko, joka antaa kruunan todennäköisyydellä 0.6 ja klaavan todennäköisyydellä 0.4. Hän heittää sitä kymmenen kertaa. Mikä
+ on todennäköisyys, että hän saa neljä kruunaa?
+ 
+ Merkitään kruunia H = heads ja klaavoja T = tails. Eräs tapa saada neljä kruunaa olisi heittosarja\\
+ \begin{center}
+  H H H H T T T T T T.
+ \end{center}
+ Sen todennäköisyys on
+ $$0.6\cdot 0.6\cdot 0.6\cdot 0.6\cdot 0.4\cdot 0.4\cdot 0.4\cdot 0.4\cdot 0.4\cdot 0.4\cdot = 0.6^4 \cdot 0.4^6 .$$
+ Eräs toinen tapa saada sama tulos olisi
+ \begin{center}
+  H T T H T T H H T T.
+ \end{center}
+ Sen todennäköisyys on
+ $$0.6\cdot 0.4\cdot 0.4\cdot 0.6\cdot 0.4\cdot 0.4\cdot 0.6\cdot 0.6\cdot 0.4\cdot 0.4\cdot = 0.6^4 \cdot 0.4^6 .$$
+ \emph{Koska tulosten järjestyksellä ei ole väliä, on samantekevää, missä järjestyksessä kruunat ja klaavat tulevat, jokaisen 
+ heittosarjan todennäköisyys on sama,} $0.4^6 \cdot 0.4^6 .$
+ 
+ Nyt saamme tehtävän ratkaistua, jos osaamme laskea erilaisten nelikruunaisten heittosarjojen lukumäärän. Jos alamme kirjoittaa näitä heittosarjoja 
+ paperille, huomaamme pian miten niiden lukumäärä lasketaan.
+ \begin{center}
+  H H H H T T T T T T\\
+  H H H T H T T T T T\\
+  H H H T T H T T T T\\
+  ...
+ \end{center}
+ Paperille tulisi kaikki kymmenkirjaimiset rivit, joissa neljä kirjaimista on H ja kuusi T. Eli niitä olisi yhtä monta kuin on tapoja valita neljä 
+ kymmenestä, ${10 \choose 4}$. Huomaa, että tämä on sama luku kuin ${10\choose 6}$, eli lopputulos ei riipu siitä, ajatellaanko sitä kruunien vai klaavojen
+ kannalta.
+ 
+ Eri tapoja saada neljä kruunaa kymmenen heiton sarjassa on siis ${10\choose 4 } = 210$ kappaletta, ja jokaisen niistä todennäköisyys on
+ $0.6^4 \cdot 0.4^6 ,$ joten neljän kruunan todennäköisyys on
+ $${10\choose 4 } \cdot 0.6^4 \cdot 0.4^6 = 210\cdot 0.6^4 \cdot 0.4^6 \approx 0.111.$$
+\end{example}
+
+Tästä saadaan yleisempi sääntö:
+\begin{center}
+ \fbox{\begin{minipage}{15em}
+	\textsc{Binomitodennäköisyydet}\\
+	\hrule \hspace{10pt}\\
+	Olkoon kolikonheitossa kruunan todennäköisyys $p$ ja \mbox{klaavan} $q$. Tällöin $n$ heiton sarjassa $k$:n kruunan saamisen 
+	todennäköisyys on
+	$${n\choose k} p^k q^{n-k} .$$
+       \end{minipage}}
+\end{center}
+
+\textsc{Huomaa:} 1) $q=1-p$.\\
+2) Tämä sääntö pätee tietenkin kaikkiin muihinkin toistokokeisiin, joissa on kaksi mahdollista tulosta. Sääntö on vain puettu konkreettisempaan
+muotoon yksinkertaisuuden takia.
+
+\begin{example}
+ Kokeen monivalintatehtävässä on 15 kysymystä ja jokaisessa viisi vaihtoehtoa. Oppilas arvaa vastaukset lukematta edes kysymyksiä. Millä todennäköisyydellä
+ hän saa 1) tasan viisi oikeaa vastausta 2) Vähintään viisi oikeaa vastausta?
+ 
+ Tämä on toistokoe, jossa onnistumisen todennäköisyys on $1/5 = 0.2$, joten a-kohdan vastaus on
+ $${15\choose 5} \cdot 0.2^5 \cdot0.8^{10} \approx 0.103.$$
+ 
+ B-kohdassa voisi laskea todennäköisyydet 6,7,8,..,15-oikein tuloksille, mutta on helpompaa laskea todennäköisyydet 0,1,2,3,4-oikein tuloksille ja sitten vähentää
+ nämäsaatu luku ykkösestä:
+ \begin{align*}
+  &P(0\text{ oikein}) = {15\choose 0} 0.2^0 \cdot 0.8^{15} = 0.8^15 \approx 0.035\\
+  &P(1\text{ oikein}) = {15\choose 1} 0.2^1 \cdot 0.8^{14} \approx 0.132\\
+  &P(2\text{ oikein}) = {15\choose 2} 0.2^2 \cdot 0.8^{13} \approx 0.231\\
+  &P(3\text{ oikein}) = {15\choose 3} 0.2^3 \cdot 0.8^{12} \approx 0.250\\
+  &P(4\text{ oikein}) = {15\choose 4} 0.2^4 \cdot 0.8^{11} \approx 0.188.\\
+ \end{align*}
+ Näistä saadaan $P(\text{enintään } 4 \text{ oikein})\approx 0.836,$ joten $P(\text{vähintään } 5 \text{ oikein})\approx 0.164.$
+\end{example}
+
+ Tällaisissa laskuissa pyöristykset voivat merkitä hyvin paljon. Pyöristettäessä kolmeen desimaaliin luku voi muuttua
+ melkein 0.0005:n verran, ja jos pyöristettyjä lukuja lasketaan viisi yhteen, voi virhe olla jo 0.0025:n luokkaa. Siksi:
+ \begin{center}
+  \fbox{\begin{minipage}{25em}
+	  Älä käytä laskuissa pyöristettyjä lukuja, ellei ole pakko.\\ Pyöristä vasta lopputulos.
+        \end{minipage}}
+ \end{center}
+
+\begin{exercise}
+ Heitetään viittä noppaa. Millä todennäköisyydellä saadaan a) tasan kolme kutosta b) Vähintään kolme kutosta?
+\end{exercise}
+
+\begin{exercise}
+ Henkilö A matkustaa pummilla saman reitin 40 kertaa kuussa. Sakkojen saamisen todennäköisyys jokaisella matkalla on 0.01. Millä todennäköisyydellä
+ A saa useammat kuin kahdet sakot kuussa?
+\end{exercise}
+
+Binomitodennäköisyyksien järkevyyden ehto on, että aiemmat tapahtumat eivät vaikuta myöhempiin. Joissakin tilanteissa binomi\-toden\-näköisyyksiä ei siis
+voi käyttää
+\begin{example}
+ Nostetaan pakasta viiden kortin käsi. Millä toden\-näköisyydellä siinä on tasan kolme herttaa?
+ 
+ Tätä ei voi laskea suoraviivaisesti binomitodennäköisyyksillä, koska jo nostetut kortit vaikuttavat tulevien korttien todennäköisyyksiin.
+ Jos tehtävää mietii vähän aikaa kynän ja paperin kanssa, sille löytyy binomi\-toden\-näköisyyksiä muistuttava ratkaisu, mutta jätetään se nyt 
+ yli\-määräiseksi harjoitustehtäväksi.
+\end{example}
+
+Joskus taas aiemmat tapahtumat vaikuttavat myöhempiin, mutta vaikutus on niin pieni, että se voidaan jättää huomioimatta. Esimerkiksi seuraavassa tehtävässä:
+
+\begin{exercise}
+ Helsingissä on 628 208 asukasta, ja heistä 105 240 on alaikäisiä.\\
+ a) Jos valitaan satunnainen helsinkiläinen, millä todennäköisyydellä hän on alaikäinen?\\
+ b) Jos valitaan 20 satunnaista helsinkiläistä, millä todennäköisyydellä joukossa on enintään neljä alaikäistä?
+ Oleta, että valinnan todennäköisyys on jokaisella valinnalla vakio (se, jonka laskit 
+ a-kohdassa). Nspirellä saat laskettua binomitodennäköisyyden suoraan komennolla \texttt{binomPdf(n,p,k)}, missä $n$ on kokeiden lukumäärä,
+ $p$ onnistumisen todennäköisyys ja $k$ onnistuneiden kokeiden todennäköisyys. LibreOfficen ohje on tiivistelmässä ja myöhemmin monisteessa, laatikossa ennen 
+ tehtävää \ref{lolaatikko}.\footnote{Jos tehtävässä kysytään vain yhtä todennäköisyyttä, käytä mieluummin binomitodennäköisyyden kaavaa.
+ Jos laskeminen olisi muuten vaivalloista, voit käyttää \texttt{binomPdf}:ää tai vastaavaa.}\\
+ c) Tarkastellaan vielä b-kohdan oletuksen vakiotodennäköisyydestä jär\-ke\-vyyt\-tä. Jos 19 ensimmäistä ryhmään valittua helsinkiläistä oli alaikäisiä,
+ mikä on \emph{oikea} todennäköisyys sille, että myös kahdeskymmenes on? Kuinka paljon se eroaa a-kohdan todennäköisyydestä?
+\end{exercise}
+
+Milloin voi olettaa, että todennäköisyys ei muutu, ja milloin ei? Tämä on suurelta osin makukysymys ja riippuu myös tuloksen odotetusta tarkkuudesta.
+Koulutehtävissä jotain voi päätellä siitä, kuinka paljon vaivaa tehtävän tekeminen ilman tätä oletusta vaatisi, tai olisiko se ylipäänsä mahdollista.
+Nyrkkisääntönä, korttipakassa aiemmilla valinnoilla on merkitystä, satunnaista helsinkiläistä valitessa ei. 
+
+\textsc{Terminologiaa.} Kokeessa, jossa heitetään kolikkoa sata kertaa, voidaan kruunien määrää sanoa kokeeseen liittyväksi \textsc{satunnais\-muut\-tu\-jaksi.}
+Kruunien lukumäärän lisäksi satunnaismuuttujia on näistä riippuvat asiat, esimerkiksi pelurin varallisuus kymmenen kolikonheiton jälkeen.
+\begin{example}
+ Henkilö matkustaa pummilla 40 kertaa kuussa. Hänen rahanmenetys on satunnaismuuttuja, joka saa arvoja 0 €, 80 €, 160 €,...,3200 €.
+\end{example}
+\begin{example}
+ Galluptutkimuksessa valitaan satunnaisesti 4 000 ääni\-oikeutettua suomalaista, joilta kysytään, ketä he äänestäisivät presidentinvaaleissa, jos se olisi nyt.
+ Sauli Niinistön kannatus on otoksen valinnasta riippuva satunnaismuuttuja, joka voi saada arvoja nollasta prosentista sataan prosenttiin. Sekä nolla prosenttia,
+ että sata prosenttia ovat mahdollisia tuloksia, koska Niinistön kilpailijoilla ja Niinistöllä oli kummallakin ainakin 4 000 äänestäjää. Ne ovat tietenkin
+ hyvin epätodennäköisiä tuloksia.
+\end{example}
+
+\begin{exercise}
+ Oletetaan, että Niinistöä kannattaa presidentiksi 62.6\% äänioikeutetuista.\footnote{Niinistö voitti tällä kannatuksella vaalit 2018, mutta
+ äänestysprosentti oli vain 66,7\%, joten tehtävän oletus on virheellinen. Se tekee laskemisesta kuitenkin paljon mukavampaa.}
+ Laiskassa vaaligallupissa valitaan satunnaisesti sata äänioikeutettua.
+ Millä todennäköisyydellä Niinistön kannatus on gal\-lu\-pis\-sa a) tasan 63\% b) tasan 100\% c) vähintään 97 \% ? 
+\end{exercise}
+
+
+
+\section{LibreOffice Calcista}
+
+LibreOffice on ilmainen toimistotyökalu, ja Calc sen taulukkolaskentaohjelma. Se muistuttaa kaupallista Exceliä, ja myös Googlen Sheets on sille sukua.
+Jos näistä oppii käyttämään yhtä, muutkin ovat aika helppoja. Näitä ohjelmia käytetään erittäin paljon myös tosielämässä. Esi\-merkiksi tällä hetkellä 
+(18.4.2018) työvoimatoimiston avoimissa työ\-paikoissa on 22 633 ilmoitusta, joista 480:ssä esiintyy sana ``excel''.
+
+LibreOfficen Calc on käytettävissä myös sähköisissä ylioppilaskirjoituksissa. Toinen käytössä oleva väline, TI-Nspire muistuttaa taulukko-ominaisuuksiltaan
+LibreOfficea, mutta on maksullinen, eikä sitä käytetä lukion jälkeen mihinkään. Jos Nspiren käyttö tuntuu sinusta mukavammalta, voit 
+tehdä tehtävät silläkin, mutta suosittelen LibreOfficea. 
+
+\textsc{Asennus.} Googlaa libreoffice ja asenna sitten se koneellesi. Kannattaa valita englanninkielinen versio, koska siihen löytyy helpommin apua, joka
+on paremmin ajantasalla.
+
+Tietokoneohjelmien käytössä tärkeintä on googlaus-taito.\footnote{Ajatellaan nyt, että googlaus tarkoittaa hakukoneen käyttä siitä riippumatta, mikä
+hakokone on kyseessä. Esimerkiksi \url{duckduckgo.com} on suosittu vaihtoehto niillä, jotka eivät pidä Googlen yksityisyyspolitiikasta.} Jos et käytä
+ohjelmaa pariin vuoteen, et muista miten mitäkin tehdään, eikä sinun tarvitsekaan. Ohjelmat myös muuttuvat harva se vuosi. On silti järkevää opetella 
+takemään asiat ainakin jollakin ohjelmalla, koska kynnys tehdä ne toisella madaltuu, ja samalla oppii yleisiä periaatteita ohjelmien toiminnasta.
+
+Googlaamisessa toimii yllättävän tarkatkin kysymykset. Kysymyksen lisäksi kannatta kirjoittaa hakuun jotain avainsanoja, kuten libreoffice calc. Jos 
+haet tarkkaa lausetta tai sanajärjestyksellä on väliä, laita ne lainausmerkkeihin. Esimerkiksi haku \texttt{``Mauno Koivisto''} palauttaa tulokset, jossa
+nimet esiintyvät peräkkäin, haku \texttt{Mauno Koivisto} antaa myös tuloksia, joissa ei ole Mauno Koivistosta mitään, mutta muista Maunoista ja muista 
+Koivistoista kylläkin.
+
+\begin{exercise}
+ Mitkä ovat hyviä hakusanoja LibreOffice Calcin käytön aloittamiseen? Kokeile niitä hakukoneeseen ja laita bookmarkkeihin parhaat.
+\end{exercise}
+
+\begin{exercise}
+\label{loex1}
+ Katso tehtävän asiat läpi, jos ne ovat sinulle jo entuudestaan tuttuja, älä turhaan näe vaivaa, vaan hyppää seuraavaan tehtävään.\\
+ 1)Tee seuraavanlainen tiedosto mielikuvitusoppilaiden pisteistä:
+ 
+ \includegraphics[width=10cm]{localc1.png}
+ 
+ Syötettyäsi numeron pystyt siirtymään alaspäin enterillä ja oikealla sarkaimella (Caps Lockin yläpuolella). 
+ 
+ 2) Klikkaa ruutua G2 ja maalaa vasemmalle ruutuun B2 asti:
+ 
+ \includegraphics[width=10cm]{localc2.png}
+ 
+ 3) Klikkaa ruutujen yläpuolella olevaa isoa sigmaa: $\Sigma$ . Mitä LibreOffice laski ruutuun G2?
+ 
+ \includegraphics[width=10cm]{localc3.png}
+ 
+ 4) Klikkaa ruutua G2. Ruudun oikeassa alakulmassa on pieni musta neliö. Tartu siihen hiirellä ja vedä neljä riviä alaspäin:
+ 
+ \includegraphics[width=10cm]{localc4.png}
+ 
+ 5. Tallenna tiedosto .ods- ja .csv-muodoissa: Kun olet klikannut ``save as'', aukeaa ikkuna, jossa voit valita tallennuspaikan, tiedoston nimen ja muodon.
+ Tiedoston muoto on todennäköisesti ikkunassa alhaalla save-napin yläpuolella, voit valita siitä ``text csv''. Jos siinä kohdassa lukee ``all formats''.
+ Voit päättää tiedoston muodon myös kirjoittamalla nimen päätteeksi ``.ods'' tai ``.csv'', esimerkiksi \texttt{mab8\_tehtava37.csv}.  
+ Tätä tiedostoa tullaan käyttämään seuraavissa tehtävissä.
+\end{exercise}
+
+Tässä tehtävässä oli montakin huomionarvoista seikkaa
+\begin{enumerate}
+ \item 
+ Summaa laskettaessa on väliä sillä, miten alue maalataan. LibreOffice laskee summan siihen ruutuun, jota aluksi klikattiin.
+ \item
+ Klikkailun ja maalailun sijaan summan voi laskea myös pelkällä näppäimistöällä. Esimerkiksi G2-ruutuun oltaisiin voitu kirjoittaa
+ \texttt{=SUM(B2:E2)} . Tässä \texttt{B2:F2} ovat alku- ja loppuruutu, josta summa lasketaan. Jos haluaa laskea lukuja yhteen sekä
+ vaaka-, että pystysuunnassa, voi alkuruuduksi valita vasemman yläkulman ja loppuruuduksi oikean alakulman. Esimerkiksi kaikkien
+ oppilaiden kaikkien pisteiden laskeminen yhteen olisi saatu kirjoittamalla johonkin ruutuun \texttt{=SUM(B2:E5)}. Kokeile vaikka.
+ \item
+ Summaan laskettiin tehtävässä mukaan ruutu F2, mutta koska se on tyhjä, sillä ei ollut vaikutusta.
+ \item
+ Hiiren käyttö on usein turhauttavaa, hidasta ja epäergonomista. Summa on aika helppo tehdä sillä, mutta useimmat muut asiat kannattaa
+ tehdä pelkällä näppäimistöllä. Tietokoneen käytössä yleisestikin kannattaa suosia näppäimistöä.
+ \item
+ Jos avaat tallennetut tiedostot ja klikkaat ruutua G2, huomaat, että .ods-muodossa siihen on jäänyt \text{=SUM(B2:F2)}, mutta .csv-muodossa
+ siinä on luku 13. Vastaavasti, jos lisäät Annikalle pisteen vaikkapa tehtävään 2, .ods-muodossa tallennettu tiedosto lisää sen automaattisesti 
+ summaan, mutta .csv-muodossa tallennettu ei. 
+ \item
+ .csv-muoto vaikuttaa edellisen huomion perusteella huonommalta, mutta se on erityisen hyvä raakadatan tallentamiseen, ja se on jopa jonkinlainen
+ standardi siinä hommassa. Csv on lyhenne sanoista comma separated values, kyseessä on käy\-tän\-nös\-sä tekstitiedosto, jossa eri sarakkeet on 
+ erotettu pilkuilla ja rivit rivinvaihdoilla. Koska joissakin maissa, esimerkiksi Suomessa, käytetään pilkkua desimaali\-erottimena, voi sarakkeiden
+ erotin olla jokin muukin, esimerkiksi \texttt{\&} tai \texttt{\textbackslash t}. Jos käytät csv-tiedostoa, jossa on eri erottimet kuin ohjelmassasi,
+ voit ohjelman säätöjen lisäksi muuttaa erottimia avaamalla sen tekstitiedostona ja käyt\-tä\-mäl\-lä find-replace all -toimintoa. Tämä kannattaa kuitenkin
+ tehdä ajatuksen kanssa: jos muutat desimaalierottimet pisteistä pilkuiksi ja arvojen erottimet pilkuista puolipisteiksi, pitää jäl\-kim\-mäi\-nen operaatio
+ tehdä ensin. Miksi?
+ \item
+ Eri koneilla ja eri ohjelmistoilla desimaalierotin voi vaihdella. Jos desimaalierotin on piste ja kirjoitat LibreOfficessa ruutuun ``5,4'', se menee
+ ruudun vasempaan reunaan, ja LibreOffice tul\-kit\-see sen tekstiksi eikä numeroksi. Jos erotin on pilkku, saattaa ``5.4'' muuttua muotoon 5. maaliskuuta.
+ Suosittelen käyttämään pistettä desimaalierottimena. Vaihto-ohjeet löytyy googlaamalla esimerkiksi \texttt{libreoffice decimal separator}. 
+ \item
+ Tiedostoille kannattaa antaa kuvaavat nimet. Tärkeistä tiedostoista kannattaa ottaa varmuuskopiot, eikä kannata olettaa, että liitteenä lähetetty
+ tiedosto päätyy vastaanottajalle. Toisinsanoen, jos lähetät vaikka koulutehtäviä opettajalle, tiedostoa ei kannata tuhota ennen kuin niistä on saatu
+ pisteet, ja mieluiten koko kurssista arvosana.
+ \item
+ Kun ruutuun G2 oli laskettu summa ruuduista B2-F2, ja ruu\-tu oli kopioitu alempiin raahaamalla, ei niihin tullut ruutujen B2-F2 summa, vaan vastaavien
+ alempien rivien summa. Tätä sanotaan suhteelliseksi viittaukseksi, ja siitä on huomattavaa hyötyä taulukkolaskennassa.
+ \item
+ Syötetyn tekstin ei tarvitse olla isoilla kirjoitettua, esimerkiksi \texttt{=sum(B2:E2)} käy aivan hyvin. Isoja kirjaimia käytetään vies\-tit\-tä\-mään,
+ että tämä sana liittyy ohjelmaan itseensä, eikä kulloinkin käsiteltyyn tiedostoon tai tehtävään.
+\end{enumerate}
+
+\begin{exercise}
+ Katso tehtävän asiat läpi, jos ne ovat sinulle jo entuudestaan tuttuja, älä turhaan näe vaivaa, vaan hyppää seuraavaan tehtävään.\\
+ Avaa tehtävässä \ref{loex1} tehty .ods-muotoinen tiedosto.\\
+ a) Laske ruutuun G6 oppilaiden saamien kokonaispisteiden summa.\\
+ b) Laske ruutuun A6 oppilaiden määrä: \texttt{=COUNTA(A2:A5)}.\\
+ c) Laske ruutuun H6 oppilaiden kokonaispistemäärän keskiarvo: \texttt{=[jokin ruutu]/[jokin ruutu]}.\\
+ d) Laske ruutuun E6 kaikkien oppilaiden kaikkien tehtävien pistemäärä suoraan tehtäväruuduista: \texttt{=SUM(B2:E5)}.\\
+ e) Klikkaa ruutua E6, ota pienestä neliöstä sen vasemmassa alakulmassa kiinni ja vedä alaspäin. Mitä alapuolella oleviin ruutuihin tulee,
+ ja miksi? \\
+ f) Poista e-kohdan laskut ja laske ruutuun B6 summa kaikkien oppilaiden tehtävästä 1 saamista pisteistä. \\
+ g) Ota ruudusta B6 kiinni ja maalaa oikealle niin, että saat jokaiseen tehtävään yhteispistemäärän.\\
+ h) Laske ruutuun B7 ykköstehtävstä saatujen pisteiden keskiarvo tällä tavalla \texttt{=[jokin ruutu]/[jokin ruutu]} .\\
+ i) Ota ruudusta B7 kiinni ja maalaa oikealle, että saisit jokaisesta tehtävästä keskimääräiset pisteet. Miksi tämä ei toimi?\\
+ j) Muuta ruudun B7 sisällöksi \texttt{=B6/\$A\$6}, ota ruudusta kiinni ja maalaa oikealle. Katso ruutujen C7-E7 sisältöä.
+\end{exercise}
+
+Tämän tehtävän ajatus oli näyttää suhteellisten viitauksien vaara: joskus viitatun ruudun halutaan pysyvän samana. Joskus samana pitäisi pysyä
+pelkän sarakkeen, joskus pelkän rivin, ja joskus molempien. Muuttumattomuus saadaan laittamalla dollarimerkki muuttumattoman pysyvän asian edelle.
+\texttt{\$A6} tarkoittaa, että sarake ei muutu, \texttt{A\$6} että rivi ei muutu, ja \texttt{\$A\$6} että kumpikaan ei muutu. Tehtävän j-kohdassa
+oltaisiin saatu sama tulos aikaiseksi myös kirjoittamalla B7-ruutuun \texttt{\$A6}, koska ruutua maalattiin vain vaaksauorassa. Melkein aina kannattaa
+kuitenkin nähdä sen verran vaivaa, että kirjoittaa ajatellun sisällön mukaisesti, eikä pienimmällä riittävällä tavalla. Tällä tavoin dokumentista on
+helpompi ymmärtää, mitä siinä lasketaan, eikä mahdolliset tulevat muutokset tai lisäykset aiheuta ongelmia. Suhteellisista viittauksista saat enemmän
+tietoa googlettamalla esimerkiksi \texttt{libreoffice suhteellinen viittaus}.
+
+Seuraavassa tehtävässä käytetään funktiota, joka laskee binomi\-toden\-näköisyyksiä.
+
+\fbox{
+  \begin{minipage}{27em}
+   \texttt{=BINOM.DIST( 3, 8, 0.6, 0 )}\\
+   laskee LibreOfficessa todennäköisyyden saada kolme kruu\-naa kahdeksalla heitolla, kun kruunan todennäköisyys on 0.6.
+  \end{minipage}
+}
+
+Viimeisenä argumenttina olevasta nollasta ei tarvitse vielä välittää. Kirjoita siihen toistaiseksi nolla. Huomaa, että funktion nimeä
+tai argumenttien järjestystä ei tarvitse muistaa tarkasti, koska libreoffice ehdottaa funktiota ja kertoo argumentit, kun alat kirjoittaa sitä.
+Lisäksi sen saa selville googlettamalla.
+
+\begin{exercise}
+\label{lolaatikko}
+ Avaa uusi dokumentti LibreOffice Calcissa ja kopioi sii\-hen ruudut vasemmanpuoleisesta kuvasta. Maalaa sitten ruudut A2 ja A3, tartu A3:n oikeassa alakulmassa
+ olevaan pieneen neliöön ja vedä alaspäin kunnes ruuduissa on numerot 0-10.
+ \begin{figure}[H]
+ \begin{center} 
+ \begin{minipage}{.45\textwidth}
+ \includegraphics[width=5cm]{localc5}
+ \end{minipage}
+ \begin{minipage}{.45\textwidth}
+ \includegraphics[width=5cm]{localc6}
+ \end{minipage}
+ \end{center}
+ \end{figure}
+ 
+ a) Ajatellaan koetta, jossa kolikkoa heitetään kymmenen kertaa. Kruunan todennäköisyys on 0.52. Laske ruutuun B2 binomitodennäköisyys nollalle
+    kruunalle. Älä kuitenkaan käytä funktion ensimmäisenä argumenttina lukua 0, vaan viittaa ruutuun A2 ilman dollareita.\\
+    
+ b) Ota ruudusta B2 kiinni ja raahaa binomitodennäköisyydet ruutuihin B3-B12.
+ 
+ c) Montako kruunaa on todennäköisin tulos? Entä epätodennäköisin?
+ 
+ d) Laske binomitodennäköisyyksien summa ruutuun B13. Mitä saatu luku kertoo tehtävän ratkaisusta?
+\end{exercise}
+
+\begin{exercise}
+\label{kannatustehtava}
+ Oletetaan, että 62,6\% kaikista äänioikeutetuista äänestäisi Sauli Niinistöä, jos vaalit järjestettäisiin nyt.\\
+ a) Laiska gallupin tekijä kysyy sadalta satunnaiselta äänioikeutetulta, ketä he äänestäisivät. Millä todennäköisyydellä hän saa Niinistön kannatukseksi
+ 58\% -68\% (eli n. viiden prosenttiyksikön sisälle todellisesta kannatuksesta)?\\
+ b) Vielä laiskempi gallupin tekijä haastattelee vain kahtakymmentä sa\-tun\-nais\-ta äänioikeutettua. Millä todennäköisyydellä hän saa Niinistön kannatukseksi
+ 55\% - 70\%? \\
+ c) Iltapäivälehti kysyy nettisivuillaan lukijoilta, ketä he äänestäisivät presidentiksi. Tulosten mukaan Niinistö ei pääsisi edes toiselle kierrokselle.
+ Onko tämä vain huonoa onnea, vai kenties salaliitto?
+\end{exercise}
+
+\textsc{Kertymäfunktio.} Heitettäessä kolikkoa tuhat kertaa jokainen kruunien lukumäärä on hyvin epätodennäköinen. Tällöin yleensä ollaan kiinnostuneempia
+todennäköisyydesta saada esimerkiksi 0-100 kruunaa kuin 434 kruunaa. Tehtävässä \ref{kannatustehtava} nähtiin, kuinka näitä todennköisyyksiä voidaan laskea
+melko vaivattomasti pienille määrille tapauksia. Isommilla määrillä on hyödyllistä käyttä kertymäfunktiota, joka kertoo, mikä on todennäköisyys saada
+enintään $n$ kappaletta kruunia.
+
+\begin{example}
+ Oletetaan, että kolikonheitosta tulee kruuna todennäköisyydellä 0.57. Kolikkoa heitetään kymmenen kertaa. Taulukoidaan jokaisen kruunamäärän todennäköisyys
+ ja kumulatiivinen todennäköisyys enintään $n$:lle kruunalle:
+
+ \begin{tabular}{l|l|l}
+ kruunia &TN &kumulatiivinen TN\\
+ \hline
+0	&0.0002161148	&0.0002161148\\
+1	&0.0028647779	&0.0030808927\\
+2	&0.0170887332	&0.0201696259\\
+3	&0.0604066849	&0.0805763108\\
+4	&0.1401294608	&0.2207057716\\
+5	&0.2229036074	&0.443609379\\
+6	&0.2462307291	&0.6898401081\\
+7	&0.186513642	&0.8763537501\\
+8	&0.0927146302	&0.9690683803\\
+9	&0.0273112864	&0.9963796667\\
+10	&0.0036203333	&1\\
+ \end{tabular}
+
+Taulukosta nähdään esimerkiksi, että todennäköisyys saada enintään neljä kruunaa on n. 0.22. Kumulatiivinen todennäköisyys kymmenelle kruunalle on ykkönen,
+koska on varmaa, että kymmenellä heitolla saadaan enintään kymmenen kruunaa.
+
+Terminologiaan tutustuaksemme, keskimmäistä saraketta sanotaan ensimmäisen \emph{pistetodennäköisyysfunktioksi.} Jos sitä merkitään $f$:llä, voidaan kirjoittaa
+esimerkiksi $f(4)\approx 0.140.$ Oikeanpuoleinen sarake, eli kumulatiivinen todennäköisyys on taas $f$:n \emph{kertymäfunktio.} Jos sitä merkitään
+$F$:llä, voidaan sanoa vaikkapa $F(7)\approx = 0.876.$ 
+\end{example}
+
+Tarkemmin määriteltynä pistetodennäköisyysfunktion $f$ kertymäfunktiolle $F$ on aina
+$$F(n) = f(1)+f(2)+\cdots + f(n).$$
+Toinen tapa ajatella kertymäfunktiota on
+$$F(n) = P ( \text{Enintään } n \text{ kruunaa}) $$
+Kertymäfunktio saadaan libreofficessa samalla tavalla kuin binomitodennäköisyys, mutta laittamalla viimeisen mystisen nollan paikalle ykkönen:
+\texttt{=binom.dist( 6, 10 , 0.57, 1)} antaa ruutuun $0.6898401081,$ kuten ylläolevan taulukon mukaan kuuluukin. 
+
+Kertymäfunktion suurin etu meille on se, että sen avulla on helppo laskea esimerkiksi 
+\begin{align*}
+P(3 \leqq \text{kruunia} \leqq 9) &=P(\text{kruunia} \leqq 9) - P(\text{kruunia} \leqq 2)\\
+&=F(9)-F(2)\\
+&=0.9963796667-0.0201696259\\
+&=0.9762100408.
+\end{align*}
+Huomaa, että alarajan kolmonen muuttuu kakkoseksi. Jos miinustaisimme $F(9)-F(3)$, ei lopputulokseen jäisi tapausta kolme kruunaa.
+
+\begin{example}
+ Niinistöä kannattaa presidentiksi 62,6\% äänioikeutetuista. Ahkera gallupin tekijä haastattelee neljää tuhatta 
+ satunnaisesti valittua äänioikeutettua. Millä todennäköisyydellä
+ hän saa Niinistön kannatukseksi 60.6\% - 64.6\%, eli kahden prosenttiyksikön sisälle todellisesta kannatuksesta?
+ 
+ Koska 4 000 äänioikeutettua on vielä pieni osa kaikista äänioikeutetuista, on tämä käytännössä binomijakautunut toistokoe.
+ Merkitään haas\-ta\-tel\-tu\-jen Niinistön äänestäjien määrää $n$:llä. 
+ Prosenttiyksikköjä 60.6\% - 64.6\% vastaa $n= 2 424 \ldots 2 584$, joten olemme kiinnostuneita
+ todennäköisyydestä $P( 2424\leqq n \leqq 2584).$ 
+ 
+ Kertymäfunktiolle $F$ pätee
+ $$F(2 584) = P(N \leqq 2584)$$
+ ja
+ $$F(2 423) = P(N \leqq 2423) .$$
+ Näistä saadaan
+ $$P( 2424\leqq N \leqq 2584) = F(2584)-F(2423).$$
+ Laitetaan tämä LibreOfficeen 
+ \begin{center}
+ \mbox{\texttt{=binom.dist(2584,4000,0.626,1) - binom.dist(2423,4000,0.626,1)}}
+ \end{center}
+ ja tulokseksi saadaan n. 0.991.
+\end{example}
+
+\begin{exercise}
+ Alla on painotetun nopan todennäköisyydet. Laske oikeanpuoleiseen sarakkeeseen kertymäfunktio, eli todennäköisyydet, että
+ silmäluku on enintään $n.$\\
+ \begin{center}
+\begin{tabular}{l|l|l}
+Tulos &TN &Kertymäfunktio\\
+\hline
+1 &0.2&\\
+2 &0.1&\\
+3 &0.1&\\
+4 &0.3&\\
+5 &0.1&\\
+5 &0.2&
+\end{tabular}
+\end{center}
+\end{exercise}
+
+\begin{exercise}
+ Kolikko on reilu, eli kruuna ja klaava ovat yhtä todennäköiset. Sitä heitetään kymmenen kertaa. Laske todennäköisyys
+ saada a) enintään 7 kruunaa b) vähintään 2 kruunaa. 
+\end{exercise}
+
+
+
+\begin{exercise}
+Kolikonheitosta saadaan kruuna todennäköisyydellä 0.46. Millä todennäköisyydellä tuhannella heitolla saadaan
+a) enintään 400 kruunaa b) vähintään 500 kruunaa?
+\end{exercise}
+
+
+\begin{exercise}
+ Tutkijat pudottavat voileivän kaksisataa kertaa pöydältä lattialle, ja se putoaa 112 kertaa voipuoli alaspäin
+ (merkitään $n=112$).
+ Kokeen merkittävyyttä tarkastellaan vertaamalla sitä todennäköisyyteen saada tällainen tai äärimmäisempi tulos, jos 
+ eri päin putoaminen olisi yhtä todennäköistä. Käytännössä siis tutkijoiden pitää laskea todennäköisyys
+ $$P(n \leqq 88) + P(112\leqq n).$$
+ a) Laske tämä todennäköisyys\\
+ (Lisätietoa: tätä todennäköisyyttä sanotaan kokeen \emph{p-arvoksi}, kun nollahypoteesi on, että molemmin päin 
+ putoaminen on yhtä todennäköistä. Lukua $p=0.05$ pidetään yleensä tilastollisen merkittävyyden rajana. Lukua käytetään siksi, että ennen tietokoneaikaa
+  nämä asiat laskettiin käsin ja taulukoiden avulla, ja yleensä taulkoidut arvot olivat 0.05, 0.01 ja 0.001. Tämä luku siis on
+  jokseenkin mielivaltaisesti valittu).
+\end{exercise}
+
+\begin{exercise}
+Helsingin sanomien 22.-24. 1. 2018 teettämään galluppiin\footnote{\url{https://www.hs.fi/politiikka/art-2000005538817.html}} 
+vastasi 500 äänioikeutettua. Niinistö kannatus oli 58\% ja virhemarginaali 4,5 prosenttiyksikköä.\\
+a) Kuinka montaa galluppiin vastannutta prosenttimäärät 53,5\% ja 62,5\% vastaavat? (Älä pyöristä vielä lukuja)\\
+b) Oleta, että Niinistöä todellisuudessa kannatti 58\% äänioikeutetuista. Millä todennäköisyydellä hänen kannatus on 
+500 henkilön gallupissa ilmoitettujen virherajojen sisälpuolella? (Että kannatus olisi virherajojen sisäpuolella, sen on oltava suurempi
+kuin alaraja ja pienempi kuin yläraja. Valitse a-kohdan pyöristykset tämän perusteella)
+\end{exercise}
+
+\newpage
+\section{Keskiarvo ja -hajonta}
+
+Keskiarvo on varmaan kaikille tuttu: lasketaan luvut yhteen ja jaetaan niiden lukumäärällä.
+
+\begin{center}
+ \fbox{
+ \begin{minipage}{20em}
+ \textsc{Keskiarvo}\\
+ \hrule
+ \vspace{10pt}
+ Lukujen $x_1 , x_2 ,\ldots , x_n$ keskiarvo on
+ $$\bar{x} = (x_1 + x_2 + \cdots + x_n )/n.$$
+ \end{minipage}}
+\end{center}
+
+\begin{example}
+\label{samakeskiarvo}
+Oppilaiden A ja B matematiikan kurssien arvosanat ovat seuraavat:
+
+ \begin{tabular}{l|l|l|l|l|l|l|l|l}
+  &MAB1 &MAB2 &MAB3 &MAB4 &MAB5 &MAB6 &MAB7 &MAB8\\
+  \hline
+  A &6 &10 &10 &5 &8 &9 &10 &6\\
+  B &8 &8 &7 &9 &8 &8 &9 &7
+ \end{tabular}
+
+Matematiikan arvosana lopputodistukseen lasketaan näiden keskiarvona. A:n keskiarvo on
+$$\frac{ 6 +10 +10 +5 +8 +9 +10 +6}{8} = \frac{64}{8} = 8.$$
+B:n keskiarvo on myös kahdeksan:
+$$\frac{8 +8 +7 +9 +8 +8 +9 +7}{8} = \frac{64}{8} = 8.$$
+\end{example}
+
+Merkinnällä $\bar{x}$ tarkoitetaan joskus muitakin asioita kuin keskiarvoa. Myöhemmin tulemme käyttämään keskiarvolle myös merkintää $\mu$.
+
+LibreOffice Calcissa keskiarvo esimerkiksi ruuduista A1-A8 saadaan näin: \texttt{=AVERAGE(A1:A8)}.
+TI-Nspiressä \texttt{=mean(a1:a5)}.
+
+\begin{exercise}
+ Oppilaan matematiikan arvosanat kursseilta MAB1-MAB7 ovat
+ $$6,\, 7,\, 8,\, 6,\, 8,\, 9,\, 6.$$
+ a) Mikä on hänen matematiikan keskiarvo tällä hetkellä?\\
+ b) Mikä arvosana hänen on saatava kurssista MAB8, että keskiarvo olisi tasan 7?\\
+ c) Loppuarvosana on kurssien keskiarvo pyöristettynä lähimpään kokonaislukuun (tasan 0.5-loppuinen ylöspäin).
+ Mitkä ovat oppilaan suurin ja pienin mahdollinen loppuarvosana MAB8:n jälkeen?
+\end{exercise}
+
+Esimerkissä \ref{samakeskiarvo} kummallakin oppilaalla oli sama keskiarvo, mutta toisen arvosanat vaihtelivat aika villistikin, kun toinen oli saanut
+tasaisesti kaseja muutaman seiskan ja ysin kanssa. \emph{Keskihajonta} mittaa tätä asiaa: kuinka paljon luvut poikkeavat keskimääräisestä.
+Se on määritelty näin:
+
+\begin{center}
+ \fbox{
+ \begin{minipage}{23em}
+ \textsc{Keskihajonta}\\
+ \hrule
+ \vspace{10pt}
+ Lukujen $x_1 , x_2 ,\ldots , x_n$ keskihajonta on
+ $$\sigma = \sqrt{\frac{1}{n}((x_1 -\bar{x} )^2 + (x_2 -\bar{x} )^2 + \cdots + (x_n  -\bar{x} )^2)}$$
+ \end{minipage}}
+\end{center}
+
+\vspace{10pt}
+
+\begin{example}
+Keskihajonnan laskeminen käsin on melko työlästä, mutta opettavaista, joten lasketaan esimerkistä \ref{samakeskiarvo}
+oppilaan A matematiikan arvosanojen keskihajonta taulukon avulla (muistetaan, että $\bar{x} = 8$):
+
+\begin{tabular}{l|l|l}
+ $x_i$ & $x_i - \bar{x}$ & $(x_i - \bar{x} )^2$ \\
+ \hline
+ $6$	&$-2$	&$4$\\
+ $10$	&$2$	&$4$\\
+ $10$	&$2$	&$4$\\
+ $5$	&$3$	&$9$\\
+ $8$	&$0$	&$0$\\
+ $9$	&$1$	&$1$\\
+ $10$	&$2$	&$4$\\
+ $6$	&$-2$	&$4.$
+\end{tabular}
+
+Sitten lasketaan yhteen oikeanpuoleinen sarake, summaksi saadaan $30.$ Jaetaan tämä lukujen lukumäärällä, saadaan $30/8 = 3\frac{3}{4}$,
+ja siitä otetaan lopuksi neliöjuuri: $\sigma=\sqrt{3\frac{3}{4}}\approx 1.94.$
+\end{example}
+
+Mitä keskihajonta kertoo meille? Ei välttämättä vielä paljoakaan. Jos toinen oppilas kertoisi, että hänen arvosanojensa keskihajonta on 1,
+tietäisimme, että hänen arvosanansa ovat paljon lähempänä keskiarvosa. Jos oppilaan keskihajonta olisi 2.5, ne olisivat kauempana keskiarvosta,
+ja jos se olisi 0, olisi hänen jokainen arvosana tasan 8.
+
+\begin{exercise}
+Esimerkissä \ref{samakeskiarvo} oppilas B sai arvosanat 8, 8, 7, 9, 8, 8, 9, 7. Laske hänen arvosanojensa keskihajonta.
+\end{exercise}
+
+LibreOfficelle keskihajonnan esimerkiksi ruuduista A1-A10 voi laskea näin: \texttt{=STDEVPA(A1:A10)}. TI-Nspiressä 
+\texttt{=stdev(a1:a10)}.
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/data1.csv} on kolme sarjaa mittaustuloksia (A, B ja C). 
+ Lataa tiedosto ja laske jokaisesta sarjasta keskiarvo ja keskihajonta. 
+ (Mittaussarjat ovat eri esineiden terminaalinopeuksia putoamisen aikana).
+ 
+ Huomaa, että tiedosto ei välttämättä aukea koneellasi oikein. Siinä tapauksessa kannattaa kysyä apua. Tiedoston saa helposti näkymään 
+ oikein, mutta ohjeita lukemalla se on vaikeaa. Tämä on myös osa tehtävää, sillä tosimaailmassa väärin aukeavat tiedostot ovat yleinen 
+ hankaluus, jonka kanssa kannattaa opetella tulemaan toimeen.
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/iris.csv} on Kurjenmiekkojen lehtien pituuksia ja leveyksiä.
+ Lataa tiedosto ja laske keskiarvo ja -hajonta a) setosa-lajin sepal\_widthille b) versicolorin petal\_lengthille. (Mitat ovat senttimetrejä)
+\end{exercise}
+
+
+\newpage
+\section{Normaalijakauma}
+
+Normaalijakauma on varmaan useimmille tuttu nimellä ``kellokäyrä'' tai ``Gaussin käyrä''. Käyrä näyttää tältä:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{Empirical_Rule.PNG}
+\caption{Normaalijakauma. \textcopyright \href{https://en.wikipedia.org/wiki/File:Empirical_Rule.PNG}{Dan Kernler}}
+\label{normaalijakauma}
+\end{center}
+\end{figure}
+
+
+Suure on normaalijakautunut, jos siitä tehdyt mittaukset asettuvat käyrän mukaisesti: suurin osa mittauksista on lähellä keskiarvoa $\mu$, ja siitä enemmän
+poikkeavat mittaukset ovat harvinaisempia. Keski\-hajonta $\sigma$ (standard deviation) kertoo, kuinka leveä jakauma on. Pienel\-lä 
+keskihajonnalla suurin osa arvoista on lähellä
+keskiarvoa, kun suurilla keskihajonnoilla ne ovat kauempana siitä.
+
+Tyypillinen esimerkki on ihmisen pituus: suomalaisten aikuisten mies\-ten pituus esimerkiksi on keskimäärin
+n. 180 cm\footnote{\url{http://kasvukayrat.fi/tietoja/tietoa-terveydenhuollon-henkilokunnalle/}}. Tietoa keski\-hajonnasta
+en löytänyt, mutta oletetaan sen olevan vaikkapa 10 cm. Ylläolevasta kuvasta voidaan nyt katsoa, kuinka suuri osa suomalaisista 
+aikuisista miehistä on 170-190 cm pitkiä, eli yhden keskihajonnan päässä keskiarvosta: 68 \%. Vastaavasti kahden keskihajonnan sisällä keskipituudesta
+(160-200 cm) olisi 95\% suomalaisista aikuisista miehistä ja kolmen keskihajonnan (150-210 cm) sisällä 99.7\%.
+
+Kun mitattava asia tiedetään normaalijakautuneeksi ja 
+tunnetaan sen keskiarvo ja -hajonta, voidaan laskea, kuinka suurella todennäköisyydellä arvo asettuu millekin välille. Tässä toinen kuva, jossa sanotaan
+suunnilleen sama asia kuin edellisessä:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=10cm]{nj2.png}
+\caption{Normaalijakauma. Tässä kuvassa palkkien eroavat korkeudet 
+kuvastavat sitä, että todellisuudessa harva muuttuja on täysin normaalijakautunut.
+\textcopyright \href{https://commons.wikimedia.org/wiki/File:Empirical_rule_histogram.svg}{Dan Kernler}}
+\label{normaalijakauma2}
+\end{center}
+\end{figure}
+
+\begin{example}
+\label{naistenpituus}
+Suomalaisten aikuisten naisten pituuden keskiarvo on 167 cm ja keskihajonta 8 cm.\footnote{Keskipituuden lähde sama kuin aiemmin, keskihajonta vedetty hatusta.}
+Millä todennäköisyydellä satunnaisesti valittu suomalainen aikuinen nainen on a) 151-183 cm pitkä, b) 159-183 cm pitkä
+c) 163-171 cm pitkä?
+
+Käytetään apuna kuvaa \ref{normaalijakauma2} arvoilla $\mu=167$ cm ja $\sigma=8$ cm. \\
+a) Koska yksi keskihajonta on 8 cm, on kaksi keskihajontaa 16 cm. 151 cm on siis kaksi keskihajontaa pienempi kuin 167 cm ja 183 cm on kaksi 
+keskihajontaa suurempi kuin 167 cm. Tällä välillä on kuvan mukaan 95\% havainnoista, joten kysytty todennäköisyys on 0.95.\\
+b) Nyt välin alaraja on vain yhden keskihajonnan pienempi ja yläraja kaksi keskihajontaa suurempi kuin keskiarvo. Välillä on kuvan mukaan
+$34.1\% + 34.1\% + 13.6\% = 81.8\%$ aikuisista suomalaisita naisista, joten kysytty todennäköisyys on n. 0.82.\\
+c) Tässä kysytään, millä todennäköisyydellä valittu aikuinen suomalainen nainen on alle puolen keskihajonnan päässä keskiarvosta. Kuva ei anna siihen
+vastausta.
+\end{example}
+
+\begin{exercise}
+Kahvipaketteissa on keskimäärin 500 grammaa kahvia. Laitteiston epätarkkuuden vuoksi paketin massan keskihajonta on 3 grammaa.
+Millä todennäköisyydellä satunnaisessa kahvipaketissa on 500-506 grammaa kahvia?
+\end{exercise}
+
+\begin{exercise}
+ Ihmisten älykkyysosamäärän keskiarvo on 100 ja keskihajonta 15.\footnote{ÄO on periaatteessa määritelty näin.}\\
+ a) Millä todennäköisyydellä satunnaisesti valitun henkilön ÄO on 85-130?\\
+ b) Joskus ÄO:n keskihajonnaksi on valittu 24. Jos henkilön ÄO on 130 keskihajonnalla 15, mikä se olisi keskihajonnalla 24?
+\end{exercise}
+
+Kuvasta katsominen on helppo tapa määrittää todennäköisyyksiä, mutta valitettavan rajoittunut. Siksi käytämme kahta edistyneempää tapaa. Toinen
+niistä on laskin, ja toinen on MAOLin tauluko. Voit valita, kumpaa käytät, mutta kannattaa opetella käyttämään taulukkoa, jos a) kirjoitat
+syksyllä matikan, eikä laskimessasi ole tähän soveltuvaa toimintoa, tai b) aiot hakea opiskelemaan alaa, jonka pääsykokeissa käytetään taulukoita.
+Tällaisia aloja ovat ainakin ennen olleet esi\-merkiksi psykologia ja lääketiede. 
+
+Seuraava esimerkki kertoo kaiken oleellisen normaalijakauman käytöstä.
+
+\begin{example}
+ Palataan esimerkin \ref{naistenpituus} kohtaan c. Suomalaisten aikuisten naisten pituus on siis normaalijakautunut, sen keskiarvo on 167 cm ja
+ keskihajonta 8 cm. Millä todennäköisyydellä satunnaisesti valittu suomalainen nainen on 163-171 cm pitkä?
+ 
+ Tehdään tämä kolmella tavalla: TI-Nspirella, LibreOffice Calcilla ja MAOLin taulukoilla. 
+ 
+ \begin{minipage}{0.6\textwidth}
+ \textsc{TI-Nspire}ssä todennäköisyys saadaan näin:
+ \begin{center}
+  \texttt{normCdf(163, 171, 167, 8)}. 
+ \end{center}
+ Luvut ovat siis ala- ja yläraja, keskiarvo ja -hajonta. Tätä ei tietenkään kannata opetella ulkoa, 
+ mutta kannattaa totutella etsimään se laskimesta (ks. kuva oikealla). 
+\\\hspace{10pt}\\
+ Huomaa myös, että laskin antaa
+ ohjeet sulkuihin tuleville luvuille. Hakasuluissa on valinnaiset arvot, eli funktiota voi käyttää
+ kaksi- tai kolmeparametrisenakin. Jos suluissa on vain kolme lukua, Nspire olettaa, että keskihajonta on 1.
+ Jos lukuja on vain kaksi, Nspire olettaa, että keskiarvo on 0 ja -hajonta 1. Mikään ei tietenkään estä
+ käyttämästä funktiota aina neljällä parametrilla, sellaisissakin tilanteissa, joissa kaksi tai kolme riittäisi. 
+ Se voi olla helpompaa, yksinkertaisempaa ja vähentää virheitä.
+ \end{minipage}
+ \hfill
+\begin{minipage}{.35\textwidth}
+ \begin{center}
+  \includegraphics[width=5cm]{Untitled2.png}
+ \end{center}
+\end{minipage}
+ 
+ \textsc{LibreOffice.} 
+ Käytetään apuna binomijakaumista tuttua kertymäfunktiota, eli funktiota, joka kertoo annetusta luvusta, millä todennäköisyydellä saadaan
+ sitä pienempi tulos. 
+ 
+ Selvitetään aluksi, millä todennäköisyydellä
+ satunnaisesti valittu suomalainen aikuinen nainen on \emph{alle} 171 cm pitkä:
+ \begin{center}
+  \texttt{=NORM.DIST(171, 167, 8, 1)}. 
+ \end{center}
+ Argumentit ovat järjestyksessä: se pituus, jonka alle pitäisi olla, jakauman keskiarvo, jakauman keskihajonta ja ykkönen. Ykkönen tarkoittaa vain,
+ että halutaan nimenomaan kertymäfunktio, samalla tavalla kuin binomijakaumassa.
+ 
+ LibreOffice antaa tulokseksi noin 0.691, joka on siis todennäköisyys valita alle 171-senttinen nainen. Lasketaan seuraavaksi todennäköisyys olla
+ alle 163 senttiä pitkä:
+ \begin{center}
+  \texttt{=NORM.DIST(163, 167, 8, 1)}. 
+ \end{center}
+ Tästä LibreOffice antaa vastaukseksi n. 0.309. Nyt todennäköisyys valita satunnainen suomalainen nainen väliltä 163-171 cm on
+ $$0.691-0.309 = 0.382.$$
+ Tämä lopputulos on altis pyöristysvirheille, joten paremmin sen saa kirjoittamalla suoraan ilman välivaiheita
+ \begin{center}
+  \texttt{=NORM.DIST(171, 167, 8, 1) - NORM.DIST(163, 167, 8, 1)}. 
+ \end{center}
+ 
+
+\textsc{MAOLin taulukkokirjassa} on kertymäfunktion arvoja normaalijakaumalle, jonka keskiarvo on 0 ja -hajonta 1.
+Sen käyttö on oikeasti helppoa, mutta käytön selittäminen tekstin ja kuvien avulla ei. Siksi asiasta kannattaa mieluummin kysyä tunnilla
+kuin lukea tätä selitystä. Voit myös hypätä tämän kohdan yli, jos et usko käyttäväsi taulukoita tulevaisuudessa.
+ 
+ \begin{center}
+  \includegraphics[width=15cm]{maolnorm.jpg}
+ \end{center}
+ 
+ Taulukkoa käytetään näin: Haluamme selvittää, millä todennäköisyy\-del\-lä satunnaisen suomalaisen aikuisen naisen pituus on välillä 163-171 cm, kun 
+ pituus on normaalijakautunut, keskiarvo pituudelle on 167 cm ja keskihajonta 8 cm. Pituus 171 cm on puoli keskihajontaa suurempi kuin keskiarvo.
+ Katsotaan taulukon vasemmasta laidasta rivi 0.5. Sarakkeissa on toiset desimaalit. Me etsimme kertymäfunktion arvoa 0.50:lle keskihajonnalle, joten
+ valitsemme sarakkeesta 0 arvon 6915. Tämä luku tarkoittaa, että valitsemamme satunnainen nainen on 0.6915 todennäköisyydellä enintään 171 cm pitkä.
+ 
+ Seuraavaksi haluamme selviittää, millä todennäköisyydellä satunnainen nainen on alle 163 cm pitkä, minkä jälkeen saamme vähentämällä lo\-pul\-li\-sen
+ todennäköisyyden, samalla tavalla kuin LibreOfficella. Tässä on kuitenkin pieni mutka 163 cm on puoli keskihajontaa \emph{vähemmän} kuin 167 cm, 
+ eikä taulukossa ole negatiivisia arvoja. Negatiiviset arvot on jätetty pois, koska ne pystytään laskemaan positiivista. Allaolevassa kuvassa on
+ varjostettu alle 163-senttisiä naisia vastaava alue. Koska normaalijakauma on symmetrinen, sen pinta-ala on yhtä suuri kuin sen peilikuvan pinta-alaa
+ oikealla. Peilikuvan pinta-ala taas saadaan laskemalla $1-0.6915 = 0.3085,$ missä 0.6915 on jo taulukosta katsomamme arvo. Alle 163-senttisiä
+ naisia on siis 30.85\% väestöstä, ja todennäköisyydeksi olla välillä 163-171 cm saadaan $0.6915-0.3085 = 0.383.$
+ 
+ \begin{center}
+  \includegraphics[width=8cm]{nj-05.png}
+ \end{center}
+
+ 
+ Tiivistettynä siis: 1) Taulukosta saaadan todennäköisyyksiä, että tulos on \emph{alle} jonkin tietyn rajan. 2) Jos kyseinen raja on pienempi kuin
+ jakauman keskiarvo, eli se on keskihajonnoissa mitattuna ``miinus jotakin'', käytetään apuna jakauman symmetrisyyttä ja taulukosta löytyviä arvoja.
+ 
+ Toistaiseksi olemme sanoneet puhekielisesti esimerkiksi, että etsitty arvo on kaksi keskihajontaa suurempi tai puoli keskihajontaa pienempi kuin 
+ keskiarvo. Sillä tavalla asiaa on mielestäni helpointa ajatella. Taulukoidun arvon laskemiselle on kaavakin:
+ $$z=\frac{x-\mu}{\sigma}.$$
+ Tässä $x$ on alkuperäinen arvo, $z$ taulukoitu, \emph{normitettu} arvo, $\mu$ jakauman keskiarvo ja $\sigma$ sen keskihajonta. Arvon $z$ laskemista
+ sanotaan sen \emph{normittamiseksi}. Jos haluaisimme tietää esimerkiksi, kuinka suuri osa naisista on
+ alle 181-senttisiä, normittaisimme arvon 181 näin:
+ $$z=\frac{181-167}{8} = \frac{14}{8} =1.75 .$$
+ Sitten etsisimme taulukosta vastaavan arvon riviltä 1.7 ja sarakkeesta 5, jolloin saamme todennäköisyydeksi 0.9599. Tämän kaavan käyttäminen on
+ juuri sitä, mitä olemme tehneet aiemmin epämuodollisesti: ensiksi lasketaan, kuinka kaukana ollaan keskiarvosta (14 cm), ja sitten muutetaan mittayksiköt 
+ senteistiä keskihajonnoiksi (1.75 keskihajontaa).
+
+\end{example}
+
+ 
+\begin{exercise}
+ Kahvipaketin massa on normaalijakautunut. Sen keskiarvo on 500 grammaa ja keskihajonta 3 grammaa.\\
+ a) Millä todennäköisyydellä satunnaisessa kahvipaketissa on alle 495 g kahvia?\\
+ b) Millä todennäköisyydellä satunnaisessa kahvipaketissa on yli 510 g kahvia?\\
+ c) Kuluttajan vaaka näyttää arvoa 500 g, jos paketin todellinen massa on 499.5-500.5 grammaa. Millä todennäköisyydellä näin käy?
+\end{exercise}
+
+\begin{exercise}
+ Kurjenmiekan terälehden pituus on normaalijakautunut. Sen keskiarvo on 3.8 cm ja keskihajonta 0.5 cm. \\
+ a) Millä todennäköisyydellä satunnaisen terälehden pituus on alle 2 cm?\\
+ b) Millä todennäköisyydellä satunnaisen terälehden pituus on 4-5 cm?
+\end{exercise}
+
+\begin{exercise}
+ Kurjenmiekan terälehden pituus on normaalijakautunut. Sen keskiarvo on 3.8 cm ja keskihajonta 0.5 cm. \\
+ a) Anni kertää kymmenen satunnaista kurjenmiekan terälehteä. Millä todennäköisyydellä ne ovat kaikki alle 4.5 cm pitkiä?\\
+ b) Benjamin kerää kaksikymmentä satunnaista terälehteä. Millä todennäköisyydellä hän saa ainakin yhden kuusisenttisen?
+\end{exercise}
+
+\textsc{Merkintöjä.} Normaalijakaumaa merkitään näin: $N(\mu, \sigma^2)$.
+Esimerkiksi $N(154,4^2)$ tarkoittaa normaalijakaumaa, jonka keskiarvo
+on 154 ja keskihajonta 4. 
+
+Keskihajonnan toista potenssia nimitetään varianssiksi, ja vanhastaan on ollut tapana kertoa jakauman keskiarvo ja varianssi. 
+Jotkut ilmoittavat mieluummin keskihajonnan, joka on omiaan aiheuttamaan sekaannusksia, periaatteessa merkinnästä $N(154, 16)$ ei
+tiedä, onko varianssi vai keskihajonta 16. Toisen potenssin kirjoittaminen näkyviin on hyvä tapa ilmoittaa, että tämä tarkoittaa
+nyt varianssia. Jos esimerkiksi ylioppilaskokeessa käytetään monitulkintaista merkintää, se on kokeen tekijöiden vika.
+
+\subsection{Normaalijakauma toisin päin}
+
+\begin{example}
+ Tutkija tietää, että suomalaisten pituus noudattaa normaalijakaumaa keskiarvona 180 cm ja keskihajontana 10 cm. Hän haluaa koota snobistisen
+ klubin, jonka jäsenet kuuluvat suomalaisten pisimpään prosenttiin. Kuinka pitkä pitää olla päästäkseen hänen klubiinsa?
+ 
+ LibreOffice Calc: Tutkija kirjoittaa ruutuun \texttt{=NORM.INV(0.99, 180, 10)}, ja LibreOffice antaa vastaukseksi 203.26 cm.
+ TI-Nspirellä tutkija kirjoittaisi laskimeen \texttt{invnorm(0.99, 180, 10)}. Luvut molemmissa tapauksissa ovat 1) todennäköisyys, jota
+ vastaavaa rajaa etsitään, 2) keskiarvo ja 3) keskihajonta.
+\end{example}
+
+\begin{exercise}
+  Maitotölkin massa on normaalijakautunut keskiarvolla 1000 grammaa ja keskihajonnalla 4 grammaa.\\
+  a) Kuinka painava tölkin on oltava ollakseen painavimmassa promillessa kaikista tölkeistä?\\
+  b) Millä todennäköisyydellä tällainen tölkki on tuhannen satunnaisen tölkin joukossa?\\
+  c) Minkä painon tölkittäjä voi ilmoittaa vähimmäispainoksi, jos halutaan, että alle prosentti tölkeistä on sitä kevyempiä?
+\end{exercise}
+
+\begin{exercise}
+  Ovien valmistaja haluaa, että alle miljoonasosa ihmisistä joutuu kumartumaan kulkiessaan heidän ovistaan. Jos ihmisten keskipituus on
+  175 cm ja keskihajonta 8.5 cm, kuinka korkeita ovien pitää olla?
+\end{exercise}
+
+\subsection{Satunnaismuuttujista ja todennäköisyysjakaumista y\-lei\-ses\-ti} Tästä ei kysytä kokeessa, mutta kannattaa lukaista läpi.
+
+Satunnaismuuttujiksi sanotaan lukuja, jotka jollakin tavalla riip\-pu\-vat jostakin satunnaisesta. Esimerkiksi heitettäessä kolikkoa sata kertaa,
+on kruunien lukumäärä satunnaismuuttuja. Valittaessa satunnainen ihminen, on hänen pituutensa satunnaismuuttuja. Valittaessa satunnainen otos
+ihmisiä on heidän keskipituutensa satunnaismuuttuja. Suomalaisten keskipituus ei ole satunnaismuuttuja, se on jokin tietty luku. Myöskään
+esimerkiksi Sauli Niinistön pituus ei ole satunnais\-muuttuja.
+
+Jos tarkempia ollaan, satunnaismuuttujan ei tarvitse olla luku, se voisi hyvin olla vaikkapa nimi, kansallisuus, päällä olevan paidan väri tms.
+
+Jakauma on jonkinlainen sääntö satunnaismuuttujan ja sen arvojen todennäköisyyden välillä. Esimerkiksi kruunien määrä kolikonheitossa on
+noudattaa binomijakaumaa. Satunnaisesti valitun ihmisen pituus normaalijakaumaa. Binomijakauma on \emph{diskreetti}, koska se voi saada 
+arvoja vain tietystä äärellisestiä joukosta. Normaalijakauma on \emph{jatkuva}, eli siinä satunnaismuuttujan arvo voi olla mikä tahansa reaaliluku.
+
+Diskreettien jakaumien todennäköisyyksiä voidaan havainnollistaa par\-hai\-ten pylväsdiagrammeilla, mutta jatkuvissa jakaumissa parempi on käyrä,
+jota sanotaan jakauman \emph{tiheysfunktioksi}. Käyrän pitäisi olla \mbox{ei-negatiivinen} ja sen alle jäävän pinta-alan pitäisi olla 1. Nämä asiat pitävät 
+paikkansa normaalijakaumalle. Kun halutaan tietää, millä todennäköisyydellä henkilö on vaikkapa 184-187 cm pitkä, lasketaan käyrän alle näiden 
+$x$-akselin pisteiden
+väliin jäävä pinta-ala. Muut jatkuvat jakaumat toimivat samalla periaatteella.
+
+\begin{example}
+ \emph{Eksponenttijakauma} kuvaa esineiden kestoikää. Sen tiheysfunktio on $f(x) = \lambda e^{-\lambda x}$, missä $\lambda$ on esinekohtainen vakio,
+ ja kestoikä $x$ on postitiivinen. Mitä pienempi $\lambda$ on, sitä pidempään esineen voi olettaa kestävän.
+ 
+ \includegraphics[width=15cm]{ekspo.png}
+ 
+ Tässä kuvassa on eksponenttijakauma $\lambda$:n arvolla 0.5. Käyrä jatkuu nollan vasemmalle puolelle vain laiskuuteni takia, oletan ymmärretyksi, 
+ että esineen kestoikä ei voi olla negatiivinen. Käyrän ja positiivisten akselien väliin jäävä pinta-ala on 1. Sovitaan, että $x$-akselin yksiköt olisivat
+ vaikka vuosia. Tummennettun alueen pinta-ala on 0.15, ja se on todennäköisyys sille, että esine hajoaa 0.8-1.3 vuoden käytön jälkeen.
+ 
+ Käyrän alle jäävän pinta-alan voi laskea monella tavalla. Tässä esimerkikssä laskin sen GeoGebran komennolla \texttt{LowerSum(f, 0.8, 1.3, 10 000)},
+ suomenkielisessä GeoGebrassa \texttt{Alasumma} tjsp. Tämä komento piirtää käyrän $f$ alle 10 000 suorakulmiota ja laskee yhteen niiden pinta-alan.
+ 
+ Toinen tapa on integraalilaskenta, jota opetetaan pitkässä ma\-te\-ma\-tii\-kas\-sa. Integroimalla pinta-alalle on helppo laskea käsin tarkka arvo 
+ (toisin kuin normaalijakaumalle). Myös TI-Nspire osaa laskea pinta-alan komennolla
+ $$\int_{0.8}^{1.3} 0.5\cdot e^{-0.5x} \, dx.$$
+ Tämä komento löytyy otsikon ``matematiikkamallit'' alta. Tämä merkintä voi näyttää pelottavalta, mutta se tarkoittaa
+ yksinkertaisesti vain käyrän alle jäävää pinta-alaa sille funktiolle, joka on kirjoitettu merkkien $\int$ ja $dx$ väliin. Toden\-näköisyys\-laskennassa
+ on parempi laskea likiarvo painamalla enteriä ctrl pohjassa. Likiarvo kertoo tässä tapauksessa jotain todennäköisyyden suuruusluokasta, 
+ tark\-ka arvo ei juurikaan.
+\end{example}
+
+Eräs tärkeä asia jatkuvissa jakaumissa on se, että ei ole järkeä sanoa, että henkilön pituus on tasan 189 cm tai esineen käyttöikä tasan
+puoli vuotta. Näiden tapahtumien todennäköisyys on tasan 0. Jatkuvilla jakaumilla pitää aina laskea todennäköisyys jollekin välille. Esimerkiksi
+189 cm voisi tarkoittaa väliä 188.5-189.5 cm, ja puoli vuotta voisi tarkoittaa 182-183 päivää.
+
+Laskinhommista pitää muistaa, että TI-Nspiren Pdf-loppuiset komennot tarkoittavat todennäköisyyttä juuri mainitulle arvolle (esim \texttt{binomPdf})
+ja Cdf-loppuiset komennot arvolle ja sitä pienemmille arvoille (esim \texttt{binomPdf} ja \texttt{normalPdf}). LibreOfficessa tämä ero tehtiin
+jakaumakomennon viimeisellä parametrilla, joka on 0 tai 1. Jatkuvalle jakaumalle Pdf-loppuiset komennot ovat hyödyttömiä syystä, joka kerrottiin äsken:
+ei ole järkevää kysyä, millä todennäköisyydellä joku on tasan 189 cm pitkä.
+
+
+\newpage
+\section{Tilastotiedettä}
+
+Ajatellaan, että haluaisimme selvittää, mikä on Sauli Niinistön kannatus presidentiksi tällä hetkellä. Kannatus on (ainakin periaatteessa)
+jokin tietty prosenttiluku, joka kertoo, kuinka suuri osa äänestäjistä äänestäisi häntä, jos vaalit järjestettäisiin nyt. Tätä lukua ei 
+to\-del\-li\-suu\-des\-sa voi selvittää millään muulla tavalla kuin järjestämällä vaalit. Gallupit ovat yrityksiä arvioida tätä lukua, mutta ne ovat 
+puutteellisia.
+
+Gallupin puutteellisuus johtuu siitä, että kaikkia äänestäjiä ei voida haastatella, ja vaikka voitaisiinkin, ei totuudenmukaisista vastauksista
+olisi mitään takeita. Äänioikeutettuja vuoden 2018 presidentinvaaleissa oli n. 4,5 miljoonaa, ja vaikka heistä haastateltaisiin miljoonaa, ei voida
+varmasti sanoa, etteikö kaikki loput 3,5 miljoonaa äänestäisi esi\-merkiksi Nils Torvaldsia. Se on toki hyvin epätodennäköistä, mutta ei mahdotonta.
+
+\textsc{Varmaa tietoa ei siis voida saada, eikä sitä ole järkevää edes yrittää saada.} Järkevämpää on etsiä uskottavinta tietoa ja arvioida sen 
+paikkansapitävyyttä.
+
+Vaaligallup on harvinainen esimerkki tilanteesta, jossa todellinen arvo myös selviää (tosin eri ajanhetkellä). Paljon yleisempiä ovat tutkimukset,
+joissa ei ole \emph{mitään} muuta keinoa selvittää todellista arvoa kuin tilastollinen tutkimus, ja todellisen arvon olemassaolokin voi olla
+enemmän metafyysistä spekulaatiota. Varmuus on harvinainen ilmiö todellisessa maailmassa.
+
+Lyhyesti gallupin tekeminen menee näin:
+\begin{enumerate}
+ \item 
+ Valitaan joukko henkilöitä, joilta kysytään heidän äänestämisestään (otos).
+ \item
+ Niinistön kannatuksen ennustetaan olevan yhtä suuri kuin hänen kannatus on otoksessa. Tätä sanotaan \emph{uskottavimmaksi} arvoksi.
+ \item
+ Gallupin virhettä arvioidaan vastausten keskihajonnan avulla. Tarkemmin, siitä ja otoksen koosta lasketaan luottamusväli (esi\-merkiksi 58\% - 68\%),
+ jolla Niinistön kannatus 95\% toden\-näköisyydel\-lä on. Luottamusvälejä voidaan laskea toki muillekin todennäköisyyksille kuin 95\%.
+\end{enumerate}
+Katsotaan seuraavaksi tarkemmin jokaista näistä kohdista.
+
+\subsection{Populaatio ja otos}
+\hspace{10pt}
+
+\fbox{
+\begin{minipage}{25em}
+ \textsc{Populaatio ja otos}\\
+ \hrule
+ \vspace{10pt}
+ Populaatio on koko tutkittava joukko. Otos on jokin sitä pienempi joukko, jonka jäsenet on valittu satunnaisesti.
+\end{minipage}
+}
+
+\begin{example}
+ a) Suomen äänoikeutetut on populaatio äänestys\-tutkimuksessa. Väestörekisterin tietokoneen arpomat sata koehenkilöä on otos. Helsingin kuvataidelukion
+ opettajakunta ei ole otos, koska se ei ole satunnaisesti valittu. Iltalehden lukijakunta ei ole otos, koska se ei ole satunnaisesti valittu.\\
+ b) EU:n kansalaiset on populaatio tutkittaessa EU:n kansalaisten keskipituutta. Suomalaiset eivät ole otos, koska suomalaiset eivät ole satunnaisesti
+ valittu joukko.\\
+ c) Suomen lukiolaiset on populaatio tutkittaessa Suomen lukiolaisten varallisuutta. Kallion lukion opiskelijat eivät ole otos, koska 
+ eivät ole satunnaisesti valittu.\\
+ d) Tutkittaessa putoamiskiihtyvyyttä, voidaan mittaussarjaa ajatella otokseksi kaikien mahdollisten mittausten populaatiosta. Tämä on tie\-ten\-kin
+ täysin kuvitteellinen populaatio, mutta kuvitelma on yleensä mittaustuloksia käsiteltäessä käyttökelpoinen.
+\end{example}
+
+Populaatiota pienempää joukkoa, joka ei ole satunnaisesti valittu, sa\-no\-taan \emph{näytteeksi}. Pedantti tilastotieteilijä voisi valittaa ylläolevasta
+otoksen määritelmästä, mutta se on MAB8-kurssille aivan riittävä.
+
+\begin{exercise}
+ Kuuluuko \href{https://fi.wikipedia.org/wiki/Antti_Tuisku}{Antti Tuisku} populaatioon, kun tutkitaan\\
+ a) puoluekannatusta eduskuntavaaleissa 2019\\
+ b) ruotsalaisten keskipituutta\\
+ c) Euroopan nisäkkäiden elinikää\\
+ d) tilastotieteilijöiden työllisyysastetta.
+\end{exercise}
+
+
+\subsection{Uskottavin arvo}
+
+Presidentinvaaligalluppia tehtäessä
+tutkimuksen lopputulos on ennuste, että Niinistön kannatus koko populaatiossa on sama kuin otoksessa. Jos tutkittaisiin suomalaisten
+keskipituutta, lopputulos olisi, että keskipituus on sama kuin keskipituus otoksessa. Näitä sanotaan \emph{uskottavimmiksi} arvoiksi.
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/vpjapituus.csv} on tiedosto, jossa on yläverenpaine ja pituus pieneltä otokselta
+ aikuisia suomalaisia. \\
+ a) Määritä tiedostosta uskottavin arvo suomalaisten aikuisten yläveren\-paineelle ja pituudelle.\\
+ b) Miksi nämä eivät ole uskottavimpia arvoja kaikkien suomalaisten yläverenpaineelle ja pituudelle?
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/gallup.csv} on satunnaisesti generoitu galluptutkimus presidentinvaaleihin 
+ 2019.\footnote{Vastaukset on arvottu vaalien todellisen äänten perusteella koneellisesti.} Listassa 0 tarkoittaa, että vastaaja ei äänestäisi,
+ ja muulloin numero on sen ehdokkaan numero, jota hän äänestäisi.\\ 
+ a) Laske uskottavin arvo äänestysprosentille. Nollat on helppo laskea näin: \texttt{=COUNTIF(A1:A45, ``=0'')}\\
+ b) Laske uskottavin arvo Niinistön (8) kannatukselle. Huomaa, että kannatus lasketaan prosenttina äänestäneistä, ei äänioikeutetuista.\\
+ c) Laske uskottavin arvo Haaviston (3) kannatukselle.
+\end{exercise}
+
+
+
+
+\subsection{Otoskeskihajonta}
+
+Ajatellaan taas tapausta, jossa tutkitaan po\-pu\-laa\-ti\-o\-ta otoksen avulla. Olkoon tutkittava asia vaikka suomalaisten aikuisten
+keskipituus, populaatio kaikki suomalaiset aikuiset ja otos satunnaisesti valittu sadan henkilön joukko. Aiemmin on jo kerrottu, 
+että paras arvio koko populaation keskipituudelle on otoksen keski\-pituus. 
+
+Kun halutaan arvioida koko populaation keskihajontaa, ei kuitenkaan otoksen keskihajonta ole paras arvio. Pisimmät ja lyhimmät eivät
+välttämättä osu otokseen. Mitä pienempi otos, sitä epätodennäköisem\-min siinä on mukana ääripäitä. Siksi otoksessa on yleensä vähemmän
+hajontaa kuin koko populaatiossa. \textbf{Paras arvio koko populaation keskihajonnalle on otoskeskihajonta:}
+
+\fbox{
+\begin{minipage}{25em}
+ \textsc{Otoskeskihajonta}\\
+ \hrule
+ \vspace{10pt}
+ Otoskeskihajonta on 
+ $$\sigma_{n-1} = \sqrt{\frac{ (x_1 -\bar{x})^2 + (x_2 -\bar{x})^2 + \cdots + (x_n -\bar{x})^2 }{n-1}},$$
+ missä $x_1, x_2,\ldots ,x_n$ ovat havainnot otoksessa ja $\bar{x}$ niiden keskiarvo.\\
+ LibreOfficella (esimerkiksi) \texttt{=STDEV(A1:A13)} .\\
+ TI-Nspiressä \texttt{=stdevsamp(A1:A13)}.
+\end{minipage}
+}
+
+
+\textsc{Huomaa:}
+\begin{itemize}
+\item
+Otoskeskihajonta eroaa keskihajonnasta vain siinä, että jaetaan $n-1$:llä eikä $n$:llä, ja sen käyttötarkoitus on saada otoksesta
+ennuste koko populaation keskihajonnalle. 
+ \item Sinun ei tarvitse osata keskihajonnan tai otoskeskihajonnan kaavaa, eikä todennäköisesti edes käyttää niitä koskaan.
+ Laske ne suosiolla koneella.
+ \item Otoskeskihajonta on aina suurempi kuin keskihajonta.
+ \item Mitä suurempi otos, sitä pienempi on otoskeskihajonnan ja keskihajonnan ero. Otoskoolla 10 ero on n. 5\%, otoskoolla
+ 100 n. 0.5\% .
+\end{itemize}
+
+
+Hyvin monessa ohjelmistossa tai laskimessa on kerrottu epäselvästi, antaako toiminto
+keskihajonnan vai otoskeskihajonnan. Ne saatetaan erottaa toisistaan esimerkiksi merkinnöillä $\sigma_n$ ja $\sigma_{n-1}$. Libre\-Officessa
+otoskeskihajonnan nimi on pelkkä \texttt{STDEV}, kun keskihajonnassa täs\-men\-ne\-tään \texttt{STDEVPA}. Tämä johtuu siitä, että tarve laskea
+otos\-keskihajonta on paljon yleisempi kuin tarve laskea koko populaation keskihajonta.
+
+\begin{example}
+ Tutkija kerää kurjenmiekan terälehtiä ja mittaa niiden pituudet:
+ $$1.4, 1.4, 1.3, 1.5, 1.4, 1.7 \text{ cm.}$$
+ Hän laittaa luvut LibreOffice Calciin ja laskee niiden keskiarvoksi 1.45 cm, keskihajonnaksi 0.1258 cm ja otoskeskihajonnaksi 0.1378 cm.
+ 
+ Hän päättelee, että kurjenmiekkojen terälehdet yleisesti ovat 1.45 cm pitkiä, ja niiden pituuden keskihajonta on 0.1378 cm.
+ 
+ Luku 0.1258 cm on käytännössä hyödytön. Se kertoo vain, mikä on näiden kuuden nimenomaisen terälehden pituuksien keskihajonta. Todellisuudessa
+ tutkija ei edes laskisi sitä.
+\end{example}
+
+
+
+
+\begin{exercise}
+ Tutkija yrittää selvittää norjalaisten aikuisten keski\-pituutta. Hän valitsee satunnaisen otoksen ja saa mitat
+ $$179, 174, 171, 169, 172, 148 \text{ ja } 171 \text{ cm.} $$
+ Mikä on hänen ennusteensa norjalaisten aikuisten pituudelle ja sen keskihajonnalle?
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/iris.csv} on Kurjenmiekkojen mittoja. Laske uskottavin arvo versicolor-lajikkeen terälehden
+ leveydelle (petal\_width) ja sen otoskeskihajonta.
+\end{exercise}
+
+
+\subsection{Luottamusväli suurella otoksella}
+
+Tutkimuksissa pelkkä uskottavin arvo on usein melko hyödytön, jos mukana ei ole jonkinlaista virheanalyysia. 
+
+Luonnontieteiden artikkeleissa voitaisiin ilmoittaa
+esimerkiksi putoamis\-kiihtyvyyden olevan mittausten perusteella 9.7$\pm$0.5 m/s$^2$. Tämä tarkoittaisi, että tutkimuksessa otoskeskihajonta tulokselle
+on 0.5 m/s$^2$. Annetut rajat eivät siis ole suurimpia ja pienimpiä mahdollisia arvoja, eikä lopputulos kovin suurella todennäköisyydellä edes ole 
+näissä rajoissa. Näiden artikkeleiden lukijat yleensä osaavat itse laskea tarpeidensa mukaan sopivan välin, jolla arvo milläkin todennäköisyydellä
+sijaitsee.
+
+Vaaligallupeissa ja populaariteksteissä on usein tapana ilmoittaa 95\%:n \emph{luottamusväli}. Todellisen arvon voi ajatella olevan 95\% toden\-näköisyydel\-lä
+tällä välillä.\footnote{Pedantti tilastotieteilijä nuhtelisi tästä sanamuodosta. Yksittäisessä gallupissa todellinen 
+kannatus joko on tai ei ole ilmoitetulla välillä. Kaikissa gallupeista n. 95:ssä prosentissa todellinen kannatus on ilmoitetulla
+95\%:n luottamusvälillä.} Galluppeja uutisoitaessa sanotaan usein esimerkiksi
+``todellinen kannatus voi vaihdella kaksi prosenttiyksikköä suuntaansa'', joka on virheellinen väite. Todellinen kannatus \emph{voi} olla melkein mitä tahansa. 
+Viidessä prosentissa kaikista gallupeista todellinen
+kannatus ei ole annettujen rajojen sisällä.
+
+Katsotaan ensin, miten luottamusväli lasketaan käytännössä mekaanisesti, ja sitten vasta, mistä se tulee.
+
+\textsc{Resepti 95\% luottamusvälin laskemiseen:}\\
+\begin{enumerate}
+ \item 
+ Tutkit jotakin asiaa koko populaatiossa, ja sitä varten valitset otoksen, jossa on $n$ satunnaista populaation jäsentä.
+ \item
+ Laske otoksesta keskiarvo $\bar{x}$ ja otoskeskihajonta $s$ (merkitään otoskeskihajontaa näin, että se olisi yhteneväinen MAOLin tau\-lu\-koi\-den kanssa).
+ \item
+ Luottamusvälin keskipiste on $\bar{x}$. Sen pituus molempiin suuntiin on $1.96\cdot\frac{s}{\sqrt{n}} .$
+\end{enumerate}
+
+\begin{example}
+ Tutkitaan sadan henkilön otoksella suomalaisten aikuisten keskipituutta. Otoksessa keskipituus on 168.70 cm ja pituuden keskihajonta 9.5 cm.
+ 
+ 95\%:n luottamusväliä varten lasketaan ensin
+ $$ 1.96\cdot\frac{s}{\sqrt{n}} = 1.96\cdot\frac{9.5}{\sqrt{100}} = 1.862.$$
+ Luottamusvälin alaraja siis on $168.70 - 1.862 = 166.838 \approx 166.8$ cm ja yläraja $168.70 + 1.862 = 170.562 \approx 170.6$ cm.
+
+ Tutkimuksessa saatu 95\%:n luottamusväli on siis $[166.8 , 170.6].$
+\end{example}
+
+\begin{exercise}
+ Suomalaisten aikuisten yläverenpainetta tutkitaan 50 henkilön otoksella, jossa keskiarvo yläpaineelle on 143.84 mmHg ja keskihajonta 25.77 mmHg.
+ Mikä on 95\%:n luottamusväli tutkimuksen mukaan?
+\end{exercise}
+
+Kun halutaan suurempia tai pienempiä luottamusvälejä, taikaluku 1.96 korvataan asiaankuuluvalla luvulla. Esimerkiksi 99\%:n luottamusvälissä se on
+2.58. Muuten laskut ovat täysin samat.
+
+\begin{exercise}
+ Etsi MAOLin taulukoista luottamusvälit ja laske edelliseen tehtävään 99.9\%:n luottamusväli.
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/pituuksia.csv} on otos amerikkalaisten aikuisten pituuksia. Laske sen perusteella\\
+ a) 95 \%:n luottamusväli amerikkalaisten aikuisten keskipituudelle\\
+ b) 99\%:n luottamusväli amerikkalaisten aikuisten keskipituudelle.
+\end{exercise}
+
+\fbox{
+\begin{minipage}{28em}
+ \textsc{Keskihajonta kolikonheittokokeessa}\\
+ \hrule
+ \vspace{10pt}
+ Jos kolikkoa on heitetty $n$ kertaa ja saatu $k$ kruunaa, merkitään $p=\frac{k}{n}$
+ ja käytetään luottamusvälin laskemisessa otoskeskihajonnan paikalla lukua
+ $$s = \sqrt{p(1-p)} .$$
+ Luottamusväli lasketaan kruunien suhteelliselle osuudelle $p$.
+\end{minipage}
+}
+
+Kolikonheiton keskihajonta saadaan siitä, että suurelle määrälle $n$ toistoja kolikonheitto muistuttaa normaalijakaumaa keskiarvolla $np$ ja 
+keskihajonnalla $np(1-p)$, missä $p$ on kruunan todennäköisyys. Tarkempi perustelu edellyttäisi taas vähän vaativampaa matematiikkaa,
+joten ei ryhdytä siihen nyt.
+
+Huomaa, että tämä muotoilu poikkeaa vähän MAOLin taulukon muotoilusta (ainakin käytettävissäni olevassa versiossa): me laskemme ensin
+luvun $s$ ja sitten sovellamme aiempaa kaavaa, jossa se jaetaan $\sqrt{n}$:llä, kerrotaan 1.96:lla jne. MAOLin taulukon kaavassa $\sqrt{n}$:llä
+jakaminen on sisällytetty keskihajonnan kaavaan. Meidän menetelmällä luottamusväleille ei tarvitse useampia eri kaavoja. (Tämä kannattaa katsoa
+MAOLin taulukosta läpi, niin tulet toimeen asian kanssa kokeissa).
+
+
+\begin{example}
+\label{luottamusvaliesimerkki}
+Vaaligallupissa haastateltiin sataa satunnaista ääni\-oikeutettua, joista 57 sanoi,
+että äänestäisi Niinistöä, jos vaalit jär\-jes\-tet\-täi\-siin nyt. Mikä on 95\%:n luottamusväli Niinistön kannatukselle?
+
+Tämä on oleellisesti sama asia kuin kolikonheitto, joten $p=\frac{57}{100} = 0.57$ ja
+$$s = \sqrt{p(1-p)} = \sqrt{0.57\cdot 0.43} = \sqrt{0.2451} .$$
+Ei lasketa vielä $s$:lle likiarvoa, ettei lopputulokseen tule liikaa pyöristys\-virhettä.
+Luottamusvälin alarajaksi saadaan
+$$p-1.96\cdot\frac{s}{\sqrt{n}} = p - 1.96\cdot\frac{\sqrt{0.2451}}{\sqrt{100}} \approx 0.472$$
+ja ylärajaksi 
+$$p + 1.96\cdot\frac{s}{\sqrt{n}} = p + 1.96\cdot\frac{\sqrt{0.2451}}{\sqrt{100}} \approx 0.667.$$
+95\%:n luottamusväli Niinistön kannatukselle on siis $[47.2\% ,66.7\%].$
+
+Järkevä laskija huomaa, että ala- ja ylärajojen kaavat eroavat toisistaan vain mii\-nuk\-sel\-la ja plussalla, ja käyttää hyväkseen laskimen
+muisti\-toimintoja tai copy-pastea. Huomaa myös, että ala- ja ylärajat on tässä pyöristetty poispäin 0.57:stä, koska pyöristysvirheen ei haluta 
+tekevän luottamus\-välistä liian optimistista.
+\end{example}
+
+\begin{exercise}
+ Vaaligallupissa haastateltiin tuhatta satunnaisesti valittua äänoikeutettua. Heistä 712 sanoi aikovansa äänestää.
+ Mikä on gallupin perusteella 95\% luottamusväli
+ vaalien äänestysprosentille?
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/gallup2.csv} on koneellisesti arvottu vaaligallup presidentinvaaleista 2018.
+ Luku 0 tarkoittaa hylättyä ääntä ja muut numerot ehdokkaiden numeroita. Laske 95\%:n luottamusväli Haataisen (6) ja Vanhasen (4) kannatuksille. 
+ Oliko heidän todellinen kannatus luottamusvälillä? Käytä apuna sivua \url{https://fi.wikipedia.org/wiki/Suomen_presidentinvaali_2018} 
+ Laske hylätty ääni mukaan kokonaisäänimäärään.
+\end{exercise}
+
+
+\begin{exercise}
+ Osoitteessa \url{https://www.vauva.fi/keskustelu/3080040/eduskuntavaali-2019-gallup} kysytään, mitä puoluetta 
+ korkea\-tasoi\-ses\-ta keskustelusta tunnetun Vauva-lehden lukijat aikovat äänestää eduskuntavaaleissa 2019.
+ Klikkaa ``näytä vastaukset'' vaihtoehtojen alapuolella nähdäksesi tulokset.\\
+ a) Mikä puolue olisi kyselyn perusteella vaalien jälkeen eduskunnan suurin?\\
+ b) Mikä on 95\%:n luottamusväli puolueen kannatukselle?\\
+ c) Onko a- ja b-kohdan ennusteet päteviä? Miksi/miksi ei?
+\end{exercise}
+
+
+
+\subsection{Lisätietoa, vaikea ja vapaaehtoinen}
+\label{tt-lisatietoa}
+
+``Uskottavin arvo'' tarkoittaa \emph{sitä arvoa, joka tekee kerätyn aineiston
+todennäköisimmäksi}. Jos gallupissa 62\% vastaajista sanoo äänestävänsä Niinistöä, tällaisen aineiston saaminen on todennäköisempää 62\%:n kuin
+61\%:n tai 63\%:n todellisella kannatuksella. Tämä on eri asia kuin sanoa, että 62\%:n kannatus on todennäköisin. Asian tarkempi perustelu vaatisi
+enemmän matematiikkaa kuin tässä on tarkoituksenmukaista käydä läpi, joten tämä kannattaa ottaa vain uskon asiana. Olisi väärin sanoa, että
+62\%:n kannatus on todennäköisin, koska se yksinkertaisesti joko on todellinen kannatus, tai se ei ole, eikä galluppia tehtäessä ole mitään keinoa
+selvittää, kumpaa se on.
+
+Mistä luottamusvälit tulevat? Ajatellaan, että tutkitaan jotain normaalijakautunutta suuretta, vaikka suomalaisten aikuisten pituutta.
+Kun arvio koko populaation keskipituudelle lasketaan otoksesta, on arvio satunnainen, se riippuu otoksen satunnaisesta valinnasta. 
+Mitä suurempi otos, sitä lähempänä arvion voi olettaa olevan todellista arvoa. Jos koko populaatiossa keskipituus on $\mu$ ja pituuden keskihajonta
+$\sigma$, voidaan kohtalaisella yhtälönpyörittelyllä näyttää, että otoksesta laskettu keskiarvo on (melkein) normaalijakautunut keskiarvolla $\mu$ ja 
+keskihajonnalla $\frac{\sigma}{\sqrt{n}} .$
+
+Kun halutaan selvittää vaikkapa 95\%:n luottamusväliä, halutaan että 47.5\% on keskivälin kummallakin puolella. Luottamusvälin alaraja on siis se,
+jonka alapuolella on 2.5\% kaikista otoksista lasketuista keskiarvoista ja yläraja se, jonka alapuolella on 97.5\% niistä. Nämä sijoittuvat 1.96 
+keskihajonnan päähän keskiarvosta.
+
+Yleiset luottamusvälit, esimerkiksi 80\%:n tai 99.99\%:n luottamusvälit saadaan nyt tällä reseptillä:
+\begin{enumerate}
+ \item 
+ Puolita luottamusväli ja laske se yhteen 50\%:n kanssa. Sanotaan tätä luvuksi $x$. 
+ Esimerkiksi 80\% luottamusvälitstä saat luvun $x=\frac{80\%}{2} + 50\% = 90\% = 0.9$.
+ \item
+ Korvaa 95\%:n luottamusvälin kaavassa taikaluku 1.96 luvulla, jonka saat Nspirestä normaalijakauman käänteisfunktiolla näin:
+ \texttt{invnorm(x,0,1)} tai LibreOffice Calcilla näin \texttt{=NORM.INV(x,0,1)}.
+\end{enumerate}
+
+Pienillä otoksilla luottamusvälin laskeminen poikkeaa siten, että taikaluku 1.96 (95\%:n luottamusvälillä) korvataan t-jakauman vastaavalla luvulla.
+Esimerkiksi 95\%:n luottamusvälissä luku 1.96 vastaa normaalijakauman käänteisfunktion arvoa \texttt{invnorm(0.975, 0,1)}. Jos otoskoko olisi vaikka
+8, korvattaisiin luku 1.96 sillä luvulla, jonka laskin antaa, kun siihen kirjoittaa \texttt{invt(0.975,7)}. Tässä luku 7 on
+ns vapausaste, ja se on otoksen koko miinus yksi. Käyttöohjeissa vapausaste lyhennetään usein esim df, eli degrees of freedom.
+
+Suuren ja pienen otoksen raja riippuu halutusta tarkkuudesta. Kohtuullisen yleinen raja suuren ja pienen jakauman
+erolle on 30. Huomaa, että tämä raja ei siis kerro,
+onko gallupin otos riittävä järkevien tulosten saamiseen, vaan ainoastaan sen, pitäisikö sen luottamusväli laskea t-jakauman vai normaalijakauman mukaan.
+Periaatteessa luottamusväli pitäisi laskea aina t-jakaumasta, mutta suurilla otoksilla se muistuttaa normaalijakaumaa.
+
+\newpage
+\section{Lisätehtäviä}
+
+Kaikki nämä ovat vanhoja matematiikan yo-tehtäviä. Tehtävät eivät ole missään erityisessä järjestyksessä.
+
+\begin{exercise}
+ (Syksy 17, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex1.png}
+\end{exercise}
+
+
+\begin{exercise}
+ (Kevät 16, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex2.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 16, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex3.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 11, pitkä. Voi olla vaikea)
+ 
+ \includegraphics[width=10cm]{ex4.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 10, pitkä)
+ 
+ \includegraphics[width=10cm]{ex5.png}
+\end{exercise}
+
+
+\begin{exercise}
+ (Kevät 08, pitkä)
+ 
+ \includegraphics[width=10cm]{ex6.png}
+\end{exercise}
+
+
+\begin{exercise}
+ (Kevät 03, pitkä. Ekassa kysymyksessä pitää ajatella ehdollisia todennäköisyyksiä.)
+ 
+ \includegraphics[width=10cm]{ex7.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 01, pitkä)
+ 
+ \includegraphics[width=10cm]{ex8.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 01, pitkä)
+ 
+ \includegraphics[width=10cm]{ex9.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 99, pitkä)
+ 
+ \includegraphics[width=10cm]{ex10.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 12, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex11.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 12, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex12.png}
+\end{exercise}
+
+
+% % % \hfill\begin{minipage}{0.8\textwidth}
+% % % \textsc{Lisätietoa.} Tätä ei tarvitse ymmärtää eikä osata: Gallupin tai tutkimuksen tulosta ei voi sanoa todennäköisimmäksi, koska todellisuudessa
+% % % Niinistöllä on jokin tietty kannatus, ja suomalsiten pituuksilla on jokin tietty keskiarvo. Tämä todellinen kannatus tai keskipituus on täysin varmasti
+% % % oikea arvo, joten sen todennäköisyys on 1. Kaikki muut ehdotetut lukuarvot ovat täysin varmasti vääriä, joten niiden todennäköisyys on 0. Nämä todelliset
+% % % arvot (jotka ovat siis myös todennäköisimpiä) eivät selviä tutkimuksessa. Uskottavimmalla arvolla tarkoitetaan sitä arvoa, jonka pitäessä paikkansa 
+% % % kerätty aineisto on todennäköisin. 
+% % %  
+% % % Ajatellaan esimerkiksi, että suomalaisten aikuisten todellinen keskipituus olisi 179.8 cm. Tämä siis olisi keskiarvo, jos jokainen suomalainen aikuinen
+% % % mitattaisiin. Tutkija ei kuitenkaan pysty näin tekemään ja valitsee siksi sadan henkilön otoksen, jonka hän mittaa. Otoksen keskipituudeksi tulee 181 cm.
+% % % Tämä luku \emph{ei} ole suomalaisten todellinen keskipituus. Todennäköisimmin tällainen tulos kuitenkin saataisiin, jos keskipituus olisi 181 cm, ja 
+% % % siksi tämä on tutkijan mukaan uskottavin keskipituus. 
+% % % \end{minipage}
+
+
+
+
+
+% % Olemme nähneet kaksi merkintää asialle, joita sanotaan keskiarvoksi, $\bar{x}$ ja $\mu$. Näillä on eronsa: merkintää $\bar{x}$ 
+% % käytetään jonkin tietyn lukujoukon keskiarvosta, kun taas $\mu$ on jonkin jakauman keskiarvo, jota ei välttämättä saada laskemalla mistään luvuista.
+% % Voisimme esimerkiksi ajatella, että $\mu$ on jokin luonnonvakio, vaikkapa putoamiskiihtyvyys $\approx$ 9.81 m/s. Jos yrittäisimme määrittää
+% % sen mittauksilla, saisimme luultavasti tulokseksi lukuja normaalijakaumasta $N(9.81, \sigma^2 )$. Näiden lukujen keskiarvo voisi hyvinkin olla
+% % jotakin muuta kuin 9.81.
+% % 
+% % Yleinen tarve tilastotieteelle on yrittää selvittää jokin luku mittausten perustella. Luku voi olla luonnonvakio, tapaturma-alttius,
+% % lääkkeen kykenevyys parantaa ihmisiä, ehdokkaan tai puolueen kannatusprosentti tms. Hyvin usein tilastotiede on myös \emph{ainoa} keino
+% % selvittää kyseinen luku, sitä ei voida tarkistaa mistään muualta. Todellinen maailma eroaa koulusta juuri tällä tavalla, oikeita vastauksia ei ole.
+% % Oikeiden vastausten sijaan on olemassa parempia ja huonompia menetelmiä selvittää asioita, ja tulla toimeen epävarmuuden kanssa.
+% % 
+% % 
+% % 
+% % \begin{example}
+% %  Tutkija tekee Gallupin Niinistön kannatuksesta tammikuussa 2018. Äänioikeutettuja on yhteensä 4 498 004. Tutkija lähettää heistä tuhannelle satunnaisesti
+% %  valitulle kyselylomakkeen,
+% %  ja 374 vastaa hänelle.\footnote{Tämä luku on hatusta temmattu, mutta on tietääkseni aika lähellä yleistä vastausprosenttia galluptutkimuksiin.}
+% %  Äänioikeutettuja yhteensä oli 4 498 004.
+% %  Vastaajista 274 sanoisi äänestävänsä vaaleissa, ja 155 sanoo äänestävänsä Niinistöä.\\
+% %  a) Jos vastaajat puhuivat totta, mikä on suurin mahdollinen Niinistön kannatus?\\
+% %  b) Mikä on pienin mahdollinen Niinistön kannatus?\\
+% %  c) Jos vastaajat eivät välttämättä puhuneet totta, mikä on pienin ja suurin mahdollinen Niinistön kannatus?
+% %  
+% %  a) Tutkija tietää 155 henkilön äänestävän Niinistöä, 119 henkilön äänestävän jotakuta muuta ja sadan jättävän äänestämättä. Muita äänoikeutettuja
+% %  on 4 497 630 kappaletta. On mahdollista, että he kaikki äänestäisivät Niinistöä, jolloin Niinistön äänestysprosentiksi tulisi
+% %  $$\frac{155+4 497630}{4 498 004} \cdot 100\% \approx 99.995 \%.$$
+% %  b) Samoilla luvuilla, on mahdollista, että tutkimuksen ulkopuolelle jääneet äänestäisivät Nils Torvaldsia. Tällöin Niinistön kannatus olisi
+% %  $$\frac{155}{4 498 004} \cdot 100\% \approx 0.0022 \%.$$
+% %  c) Jos ei ole takeita, että vastaajat puhuivat totta, on mahdollista, että kukaan ei äänestäisi Niinistöä. Tällöin hänen äänestysprosenttinsa olisi
+% %  tasan 0\%.
+% % \end{example}
+% % 
+% % Esimerkin opetus on, että useimmiten varmuutta ei voida saavuttaa, eikä sitä kannata tavoitellakaan.
+% % 
+% % \begin{minipage}{0.6\textwidth}
+% % \begin{example}
+% % Oikeanpuoleisessa kuvassa näkyy 10 000 ihmisen pituuden jakauma. Tuvalussa on noin 10 000 asukasta, joten kuvitellaan,
+% % että tässä on tuvalulaisten todelliset pituudet. Kenelläkään ei ole tietoa näistä todellisista pituuksista. Viisi tutkijaa saa 
+% % tehtäväkseen selvittää tuvalulaisten keskipituuden. Jokainen heistä valitsee kymmenen tuvalulaista ja mittaa heidän pituudet.
+% % Pituuksien keskiarvot tutkijoittain ovat: 167.9 cm, 172.5 cm, 167.9 cm, 167.4 cm ja 177.7 cm. 
+% % \end{example}
+% % 
+% % \end{minipage}
+% % \begin{minipage}{0.35\textwidth}
+% % \includegraphics[width=5cm]{oikeaPituus.png}
+% % \end{minipage}
+% % 
+% % Todellisuudessa kaikkien näiden 10 000 ihmisen pituuden keskiarvo on 169.997 cm. Tutkijoiden tulokseen siis vaikuttaa jokin satunnainen tekijä,
+% % nimittäin otos, jonka he valitsevat. 
+% % 
+% % \fbox{
+% % \begin{minipage}{25em}
+% %  \textsc{Populaatio ja otos}\\
+% %  \hrule
+% %  \vspace{10pt}
+% %  Populaatio on koko tutkittava joukko. Otos on jokin sitä pienempi joukko, jonka jäsenet on valittu satunnaisesti.
+% % \end{minipage}
+% % }
+% % 
+% % \begin{example}
+% %  a) Suomen äänoikeutetut ovat populaatio äänestystutkimuksessa. Väestörekisterin tietokoneen arpomat sata koehenkilöä on otos. Helsingin kuvataidelukion
+% %  opettajakunta ei ole otos, koska se ei ole satunnaisesti valittu. Iltalehden lukijakunta ei ole otos, koska se ei ole satunnaisesti valittu.\\
+% %  b) EU:n kansalaiset ovat populaatio tutkittaessa EU:n kansalaisten keskpituutta. Suomalaiset eivät ole otos, koska suomalaiset eivät ole satunnaisesti
+% %  valittu joukko.\\
+% %  c) Suomen lukiolaiset ovat populaatio tutkittaessa Suomen lukiolaisten varallisuutta. Kallion lukion opiskelijat eivät ole otos, koska 
+% %  eivät ole satunnaisesti valittu.\\
+% %  d) Tutkittaessa putoamiskiihtyvyyttä, voidaan mittaussarjaa ajatella otokseksi kaikien mahdollisten mittausten populaatiosta. Tämä on tietenkin
+% %  täysin kuvitteellinen populaatio, mutta kuvitelma on yleensä käyttökelpoinen mittaustuloksia käsiteltäessä.
+% % \end{example}
+% % 
+% % Yllä ``satunnaisesti valittu'' on pieni oikaisu otoksen määritelmässä. Oikea määritelmä olisi, että jokaisella populaation jäsenellä on ollut
+% % yhtä suuri todennäköisyys päätyä otokseen. Todellisuudessa otoksia valitaan monimutkaisemmilla menetelmillä, mutta se ei ole tämän kurssin asia.
+% % Populaatiota pienempää joukkoa, joka ei ole satunnaisesti valittu, sanotaan \emph{näytteeksi}.
+% % 
+% % Nyt tavoitteemme olisi selvittää, missä suhteessa otoksessa tehty mittaus on koko populaatiossa vallitsevaan todelliseen arvoon. Kuten 
+% % Tuvalu-esimerkistä huomasimme, ei suhde ole itsestäänselvä. Myöskään suurempi otos ei takaa ihmetuloksia, esimerkiksi valitsemalla satunnaisesti
+% % sata valetuvalulaista saan pituuden keskiarvoksi 171.42 cm. Haluaisin sanoa, että tämä on todennäköisin arvo, tai todellinen arvo on todennäköisesti
+% % lähellä tätä, mutta sen sanominen olisi väärin: pituuksien keskiarvo on jokin todellinen luku, ja se joko on tämä luku, tai se ei ole tämä luku.
+% % Se joko on lähellä tätä lukua, tai se ei ole lähellä tätä lukua.
+% % 
+% % Tilastotieteen ratkaisu tähän on \emph{uskottavuus aineiston valossa}. Tämän sadan henkilön otoksen valossa keskipituus 171.42 cm on \emph{uskottavin}.
+% % Se ei ole todellinen keskipituus. Todellinen keskipituus on 
+
+
+
+
+
+
+
+
+
+% \includegraphics[width=7cm]{a2.png}
+% \includegraphics[width=7cm]{a4.png}\\
+% \includegraphics[width=7cm]{a8.png}
+% \includegraphics[width=7cm]{a16.png}
+
+
+\newpage
+\section{Odotusarvo (kuuluu OPSiin, mutta ei ole pakollinen kurssilla)}
+
+Jos aiot heittää reilua kolikkoa sata kertaa ja laskea kruunien lukumäärän, odotat saavasi tulokseksi suunnilleen 50. Kokeen \emph{odotusarvo}
+on siis 50. 
+
+\begin{center}
+\fbox{\begin{minipage}{25em}
+\textsc{Odotusarvo toistokokeessa}\\
+\hrule
+\vspace{10pt}
+       Jos koe toistetaan $n$ kertaa ja yhden onnistumisen todennäköisyys on $p$, on 
+       onnistumisten lukumäärän odotusarvo $np$.
+      \end{minipage}
+} 
+\end{center}
+
+
+\begin{exercise}
+ Heität noppaa 600 kertaa. Mikä on kutosten lukumäärän odotusarvo?
+\end{exercise}
+
+Odotusarvoja voi laskea monelle muullekin asialle kuin onnistumisen lukumäärälle. Uhkapeleissä ja samanluonteisissa ilmiöissä (kuten talous, vakuutukset
+jne) saadun tai menetetyn rahan odotusarvoa voi pitää päätöksen tekemisen kriteerinä.
+
+\begin{example}
+ Peluri A ehdottaa pelurille B, että he heittävät noppaa. Jos silmäluku on 1-5, A maksaa B:lle euron. Jos silmäluku on kuusi, B maksaa A:lle kuusi euroa.
+ Kannattaako B:n suostua peliin?
+ 
+ Ajatellaan, että noppaa heitettäisiin yhteensä vaikka kuusi miljoonaa kertaa. Näistä luultavasti noin miljoonasta tulisi kutonen ja viidestä miljoonasta
+ jokin muu. A siis maksaisi B:lle noin 5 000 000 euroa, ja B maksaisi A:lle noin 6 000 000 euroa. A jäisi siis pelissä voitolle, eikä B:n kannata
+ suostua siihen. 
+ 
+ Monen ensireaktio peliin olisi, että se on reilu, koska maksujen suhteet ovat 1:6 ja nopassa yksi kuudesta silmäluvusta on kutonen. Voittamisten
+ suhde ei kuitenkaan ole 1:6, vaan 1:5, kutonen vastaan viisi muuta silmälukua.
+\end{example}
+
+Jos pysytään rahaesimerkeissä, odotusarvo lasketaan käymällä kaikki alkeistapahtumat läpi, kertomalla niiden todennäköisyydet niistä aiheutuvilla tuotoilla
+tai tappioilla, ja laskemalla näin saadut luvut yhteen. Seuraava esimerkki näyttää asian selkeämmin:
+
+\begin{example}
+ Henkilö A matkustaa junalla 40 kertaa kuussa. Hän saa 80 euron sakot yhden matkan aikana todennäköisyydellä 0.01. Kuukausi\-kortin ostaminen maksaa 50 euroa.
+ A:ta ei kiinnosta pummilla matkustamisen moraaliset ongelmat, vaan ainoastaan raha. Kannattaako hänen ostaa lippu?
+ 
+ \textbf{Helpo tapa:} Kun matkoja on 40 ja sakkojen saamisen todennäköisyys on 0.01, on sakkojen odotusarvo kuukauden aikana 0.4 kappaletta. 
+ Sakkojen euromäärän odotusarvo on siis $0.4\cdot80=32$ euroa.
+ 
+ \textbf{Vaikeampi tapa}, jonka lopputulos on tietenkin sama, mutta joka on myös yleisempi. Käytetään taulukkolaskentaa:
+ 
+ \includegraphics[width=8cm]{localc7.png}
+ 
+ Tässä ensimmäisessä sarakkeessa on kaikki mahdolliset saatujen sakkojen lukumäärät.\\
+ Toisessa sarakkeessa on todennäköisyydet saada näin monta sakkoa, B2:ssa \texttt{=BINOM.DIST(A2, 40, 0.01, 0)} ja muut kopioitu siitä.\\
+ Kolmannessa sarakkeessa on odotettu rahanmenetys kutakin tarkastusmäärää varten. Jos A saa sakot esimerkiksi kaksi kertaa, hän menettää 
+ rahaa 160 euroa, mutta C-sarakkeeseen tämä on kerrottu todennäköisyydellä saada sakot kaksi kertaa, eli n. 0.053:lla.
+ C2:ssa siis on \texttt{=80*A2*B2}, ja alemmat ruudut ovat tästä kopioituja.
+ 
+ Lopullinen odotusarvo saadaan laskemalla yhteen C-sarakkeen luvut:
+ 
+ \includegraphics[width=8cm]{localc8.png}
+ 
+ Pummilla matkustamisen odotusarvo olisi siis 32 euroa, ja kannattavampaa kuin lipun ostaminen.
+\end{example}
+% 
+% Muutama tärkeä huomio: todennäköisyys saada sakot, 0.01 on tietenkin arvio. Jos A haluaisi olla tarkempi, hän yrittäisi etsiä break even 
+% todennäköisyyden, jolla pummilla matkustaminen ja lipun ostaminen olisivat yhtä kalliita vaihtoehtoja. Sitten hän miettisi tämän todennäköisyyden
+% realistisuutta. Usein saatu luku on niin mielikuvituksellisen suuri tai pieni, että sen perusteella on helppo tehdä päätöksiä. LibreOfficella
+% tällaisen todennäköisyyden etsiminen on aika helppoakin. A voisi esimerkiksi laittaa ruutuun D1 todennäköisyyden, olkoon se aluksi vaikka 0.01, ja
+% sitten vain viitata siihen B2:ssa: \texttt{=binom.dist(A2, 40, \$D\$1, 0)}. Nyt luvun muuttaminen ruudussa D1 muuttaa samantien odotusarvon ruudussa
+% C44. Kätevin tapa löytää break even todennäköisyys on haarukoida: 0.5:lla saadaan odotusarvo 1600, joten kokeillaan seuraavaksi 0.25:sta. Nyt
+% odotusarvoksi tulee 800, joten kokeillaan 0.125:sta jne. Lopulta todennäköisyydellä $1/64$ saadaan odotusarvoksi 50 euroa, joka olisi lipun hinta.
+% 
+% Oleellisempaa on kuitenkin se, että odotusarvo ei ole ainoa tapa mitata pääätöksen järkevyyttä, edes puhtaasti taloudelliselta kannalta ajateltuna.
+% Myös sillä on väliä, kuinka suuria riskejä toiminnassaan ottaa. Joku voisi esimerkiksi tarjota sinulle uhkapeliä, jossa heitetään reilua kolikkoa ja
+% panoksena on koko omaisuutesi. Jos voit voittaa viisi senttiä enemmän kuin laitat peliin, odotusarvosi on positiivinen, ja peli siinä mielessä 
+% kannattaisi, mutta siihen sisältyvät riskit ovat luultavasti liian suuret.
+% 
+% Sama ilmiö näkyy vakuutusmaksuissa: Korvaukset maksetaan kerätyillä vakuutusmaksuilla, joilla katetaan myös vakuutusyhtiön kulut. Vakuutuksen ottamisen
+% odotusarvon on siis oltava vakuutuksen ottajalle negatiivinen, tai muuten vakuutusyhtiön toiminta ei olisi kannattavaa (jossa tapauksessa vakuutuksen
+% ottaminen siltä ei myöskään olisi kannattavaa). Mahdolliset häviöt ovat kuitenkin yleensä liian isoja, että riskiä niistä kannattaa ottaa. Vakuutuksessa
+% siis pelataan päinvastaista uhkapeliä, varmaa rahaa ei vaihdeta mahdolliseen rahaan, vaan mahdollinen rahan menetys vaihdetaan turvallisuuteen.
+% 
+% Vakuutusyhtiöt ja järkevät uhkapeluritkin pyrkivät ottamaan huomioon sen, että onni voi olla välillä erittäinkin huono, ja useimmissa vakuutussopimuksissa
+% erikseen poissuljetaan luonnonkatastrofien yms. aiheuttamat tuhot.
+
+Odotusarvo voidaan laskea myös monissa muissakin tapauksissa kuin toistokokeessa. Mietitään vain tapauksia, joissa vaihtoehtoja on äärellisen monta
+ja lasketaan odotusarvoa rahan saamiselle/menettämiselle. Tällöin:
+\begin{enumerate}
+ \item 
+ Käy jokainen vaihtoehto läpi ja laske
+ $$P(\text{vaihtoehto}) \cdot (\text{vaihtoehdon tuottama rahamäärä})$$
+ \item
+ Laske edellisessä kohdassa saadut luvut yhteen.
+\end{enumerate}
+
+\begin{example}
+ Pelurin kolikko antaa kruunan todennäköisyydellä 0.54. Kannattaako hänen ehdottaa kollegallensa peliä, jossa hän voittaa euron kruunalla
+ ja häviää 1.05 euroa klaavalla?
+ 
+ Pelin odotusarvo on
+ $$0.54\cdot 1.00\text{€} + 0.46\cdot(-1.05\text{€} ) = 0.057\text{€} .$$
+ Koska odotusarvo on positiivinen, hänen kannattaa ehdottaa peliä.
+\end{example}
+
+
+\begin{example}
+ Peluri pelaa peliä, jossa hän heittää noppaa ja voittaa tai häviää seuraavan taulukon mukaan.
+ 
+ \begin{tabular}{l|l}
+  Silmäluku & Voitto\\
+  \hline
+  1 & 4\\
+  2 & 3\\
+  3 & -6\\
+  4 & 2\\
+  5 & -1\\
+  6 & -3\\
+ \end{tabular}
+
+ Jokaisen silmäluvun todennäköisyys on $\frac{1}{6}$, joten 
+ ``todennäköisyys kertaa voitto'' on $\frac{4}{6}$, $\frac{3}{6}$ jne., täytetään sarakkeeseen ``E''
+ 
+ \begin{tabular}{l|l|l}
+  Silmäluku & Voitto &E\\
+  \hline
+  1 & 4 &\,\,4/6\\
+  2 & 3 &\,\,3/6\\
+  3 & -6 & -6/6\\
+  4 & 2 &\,\,2/6\\
+  5 & -1 &-1/6\\
+  6 & -3 &-3/6\\
+ \end{tabular}
+ 
+ Kun sarake E lasketaan yhteen, saadaan $\frac{-1}{6} < 0.$ Peluri siis voi odottaa häviävänsä, eikä peli ole hänelle kannattava. 
+\end{example}
+
+
+\begin{exercise}
+ Pelaat peliä, jossa heitetään noppaa. Voitat parillisilla silmäluvuilla silmäluvun verran euroissa ja parittomilla häviät 
+ kolme euroa. Onko peli sinulle kannattava?
+\end{exercise}
+
+
+
+\begin{exercise}
+ Henkilö pelaa Monopolia. Hän heittää kahta noppaa. Silmäluvuilla 7 hän joutuu Mannerheimintielle ja joutuu maksamaan 24 000 pelirahaa. Silmäluvulla
+ 9 hän joutuu Erottajalle ja maksaa 40 000 pelirahaa. Silmäluvulla 10 ja suuremmilla hän ylittää lähtöruudun ja saa 4000 pelirahaa. Muussa tapauksessa
+ hän ei saa eikä menetä rahaa. Mikä on rahan saamisen
+ odotusarvo?
+ 
+\end{exercise}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
+

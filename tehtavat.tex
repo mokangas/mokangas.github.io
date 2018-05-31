@@ -1,0 +1,657 @@
+\documentclass[12pt,leqno,a4paper,oneside]{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{bm}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{hhline}
+\usepackage[parfill]{parskip}
+
+\usepackage{listings}
+\lstset{language=Python}
+\usepackage{color}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  otherkeywords={*,...},           % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\newtheorem{proclaim}{Lause}[section]
+\newtheorem{lemma}[proclaim]{Lemma}
+\newtheorem{corollary}[proclaim]{Seuraus}
+\theoremstyle{definition}
+\newtheorem{definition}[proclaim]{Määritelmä}
+\newtheorem{example}[proclaim]{Esimerkki}
+\newtheorem{exercise}{Tehtävä}
+\theoremstyle{remark}
+\newtheorem{remark}[proclaim]{Huomautus}
+\numberwithin{equation}{section}
+\renewcommand{\figurename}{Kuva}
+
+
+\begin{document}
+
+\title{MAB8: Tehtävät}
+\maketitle
+
+\section{Kombinatoriikkaa}
+
+
+\exercise{Laske kynällä ja paperilla a) $4!$  b) $5!$ c) $6!$.}
+\label{1-1}
+
+\exercise{Laske laskimella tai LibreOfficella a) $10!$ b) $20!$.}
+
+\exercise{Kuinka monella eri tavalla kirjaimet F,G,...,S,T voidaan järjestää? Vinkki: laske kirjainten lukumäärä sormilla.}
+\label{1-2}
+
+
+\exercise{Kuinka monella tavalla kirjaimet E,F,G,...,N,O voidaan laittaa järjestykseen niin, että a) vokaalit ovat ennen konsonantteja
+b) konsonantit ovat ennen vokaaleja?}
+\label{1-3}
+
+\exercise{Montako viisikirjaimista sanaa voidaan muodostaa kirjaimista A,B,C,D,E? Sanojen ei tarvitse tarkoittaa mitään, eli esimerkiksi
+DCCDC kelpaa sanaksi.}
+\label{1-4}
+
+\exercise{Montako nelinumeroista pin-koodia on olemassa?}
+\label{1-5}
+
+
+\exercise{Kuinka monta anagrammia sanasta SAAPAS voidaan muodostaa, jos sanojen ei tarvitse tarkoittaa mitään?}
+
+\exercise{Pussissa on 29 palloa, joissa jokaisessa on eri kirjain. Niistä muodostetaan satunnainen sana nostamalla kuusi palloa yksi kerrallaan.
+Kuinka monta erilaista sanaa voidaan saada, jos a) pallot laitetaan noston jälkeen takaisin pussiin, b) palloja ei laiteta noston jälkeen
+takaisin pussiin?}
+
+
+\exercise{Laske kynällä ja paperilla a) ${5\choose 2}$ b) ${5\choose 3}$. Mitä nämä luvut merkitsevät?}
+
+\exercise{Laske koneella a) ${10\choose 4}$ b) ${8\choose 3}$.}
+
+\exercise{Montako neljän kortin kättä voidaan nostaa korttipakan hertoista?}
+
+\exercise{Kuinka monessa viiden kortin kädessä kaikki kortit ovat samaa maata?}
+
+\exercise{Heitetään kahta noppaa (kuten esim. Monopolissa tai backgammonissa). Jos tulos on vaikkapa 2 ja 6, on samantekevää, kumpi
+noppa on kakkonen ja kumpi kutonen. Montako erilaista tulosta voidaan saada? (Tätä varten kannattaa piirttää jonkinlainen taulukko silmä\-luvuista).}
+
+\exercise{Lotossa arvotaan 39:stä numerosta 7 voittonumeroa. Kuinka monta erilaista lottoriviä on olemassa? (Unohdetaan lisänumerot toistaiseksi)}
+\label{lottolkm}
+
+\exercise{Pakasta nostetaan satunnainen kortti. Millä todennäköisyydellä se on ässä?}
+
+\exercise{Millä todennäköisyydellä yksi rivi voittaa lotossa? (Käytä tehtävää \ref{lottolkm} apuna). b) Matti on pelannut kymmenen eri riviä
+lottoa. Millä todennäköisyydellä hän saa täysosuman?}
+
+\exercise{Annelilla on pussissa 29 palloa, joissa jokaisessa on eri kirjain. Hän arpoo kaksikirjaimisen sanan. Millä todennäköisyydellä sana on ``EU'',
+jos a) hän palauttaa ensimmäisen pallon pussiin noston jälkeen b) ei palauta sitä?}
+
+\subsection{Sanastoa ja merkintöjä}
+
+\exercise{
+Sovitaan, että 
+$$A=\text{kortti on pata, ja}$$
+$$B=\text{kortti on nelonen.}$$
+Laske todennäköisyydet
+\begin{itemize}
+ \item[a)]
+ $P(A)$
+ \item[b)]
+ $P(A\text{ tai } B)$
+ \item[c)]
+ $P(A\text{ ja } B)$?
+\end{itemize}
+}
+
+
+\subsection{Jotkut vaihtoehdot ovat todennäköisempiä kuin toiset}
+
+
+\exercise{Jos kolikonheitossa kruunan todennäköisyys on 0.54, mikä on klaavan todennäköisyys?}
+
+\exercise{Pelurin nopan todennäköisyydet silmäluvuille 1-5 ovat seuraavan taulukon mukaisia:
+
+
+ \begin{center}
+ \begin{tabular}{l|l}
+  Silmäluku & P\\
+  \hline
+  1 & 0.15\\
+  2 & 0.03 \\
+  3 & 0.11 \\
+  4 & 0.21 \\
+  5 & 0.09 \\
+ \end{tabular}
+ \end{center}
+
+ Millä todennäköisyydellä hän heittää kutosen? Millä todennäköisyydellä heiton tulos on parillinen?
+}
+
+\exercise{Heitetään viittä noppaa. Millä todennäköisyydellä ei saada vitosta pienempiä silmälukuja?}
+
+\exercise{Korttipakasta nostetaan kuusi korttia. Millä toden\-näköisyydellä kaikissa on eri numero/kirjain?}
+
+\exercise{Uhkapeluri seuraa lottoarvontaa, jossa nostetaan 39:stä numerosta 7 voittonumeroa. Hän on saanut kuusi ensimmäistä numeroa oikein.
+a) Mikä on todennäköisyys, että seitsemäs numero on oikein? b) Mikä on todennäköisyys, että seitsemäs numero on väärin?
+c) Mikä on todennäköisyys ennen arvontaa, että kuusi ensimmäistä arvottua numeroa tulevat osumaan pelurin riviin, mutta seitsemäs ei?}
+
+\exercise{Opettaja lyö vetoa siitä, onko luokassa oppilaita, joilla on sama syntymäpäivä (syntymävuosi voi olla eri). 
+Oleta, että jokaisessa vuodessa on 365 päivää.
+Onko veto opettajan kannalta järkevä, jos oppilaita on a) 12 b) 24? c) Jos karkausvuodet huomioidaan, pieneneekö vai suureneeko
+opettajan voitonmahdollisuudet?}
+
+
+\begin{exercise}
+Helsingissä oli 628 208 asukasta 1.1.2017. Heistä 105 240 oli alaikäisiä ja 36 197:n äidinkieli oli ruotsi. Oleta, että äidinkielellä
+ja henkilön iällä ei ole riippuvuutta (ts. ruotsinkielisten osuus kaikissa ikäluokissa on yhtä suuri). 
+Millä todennäköisyydellä sattumanvaraisesti valittu helsinkiläinen on a) ruotsinkielinen ja alaikäinen
+b) ruotsinkielinen ja täysikäinen?\footnote{\url{https://www.hel.fi/hel2/tietokeskus/julkaisut/pdf/17_06_28_Tilastoja_1_Maki_Vuori.pdf}} 
+\end{exercise}
+
+\begin{exercise}
+ Peluri heittää kolikko kymmenen kertaa. Mikä on toden\-näköisyys, että hän saa ainakin yhden kruunan?
+\end{exercise}
+
+\begin{exercise}
+ Pelurin kolikko laskeutuu klaava ylöspäin todennäköisyydellä $0.53$. Millä toden\-näköisyydellä hän saa kuudella heitolla ainakin yhden klaavan?
+\end{exercise}
+
+
+\begin{exercise}
+ Lotossa arvotaan 39:stä numerosta 7, ja sitä pelataan 7 numeron rivillä. Mikä on todennäköisyys, että rivissä on ainakin yksi numero oikein?
+\end{exercise}
+
+\begin{exercise}
+ Korttipakasta nostetaan viiden kortin käsi. Millä toden\-näköisyydellä ainakin kahdessa kortissa on sama numero/kirjain?
+\end{exercise}
+
+\begin{exercise}
+ Korttipakasta nostetaan kolme korttia. Millä toden\-näköisyydellä ainakin kaksi niistä on samaa maata?
+\end{exercise}
+
+
+\begin{exercise}
+ Mikä on todennäköisyys sille, että toinen pakasta nostettu kortti on pata ehdolla, että ensimmäinen oli hertta?
+\end{exercise}
+
+
+\begin{exercise}
+ Laske todennäköisyys sille, että kahden nopan heitolla saadaan ainakin yksi kutonen ehdolla, että molemmat silmäluvut ovat parillisia.
+\end{exercise}
+
+
+
+\section{Toistokoe ja binomitodennäköisyydet}
+
+\begin{exercise}
+ Heitetään viittä noppaa. Millä todennäköisyydellä saadaan a) tasan kolme kutosta b) Vähintään kolme kutosta?
+\end{exercise}
+
+\begin{exercise}
+ Henkilö A matkustaa pummilla saman reitin 40 kertaa kuussa. Sakkojen saamisen todennäköisyys jokaisella matkalla on 0.01. Millä todennäköisyydellä
+ A saa useammat kuin kahdet sakot kuussa?
+\end{exercise}
+
+
+\begin{exercise}
+ Helsingissä on 628 208 asukasta, ja heistä 105 240 on alaikäisiä.\\
+ a) Jos valitaan satunnainen helsinkiläinen, millä todennäköisyydellä hän on alaikäinen?\\
+ b) Jos valitaan 20 satunnaista helsinkiläistä, millä todennäköisyydellä joukossa on enintään neljä alaikäistä?
+ Oleta, että valinnan todennäköisyys on jokaisella valinnalla vakio (se, jonka laskit 
+ a-kohdassa). Nspirellä saat laskettua binomitodennäköisyyden suoraan komennolla \texttt{binomPdf(n,p,k)}, missä $n$ on kokeiden lukumäärä,
+ $p$ onnistumisen todennäköisyys ja $k$ onnistuneiden kokeiden todennäköisyys. LibreOfficen ohje on tiivistelmässä ja myöhemmin monisteessa, laatikossa ennen 
+ tehtävää \ref{lolaatikko}.\footnote{Jos tehtävässä kysytään vain yhtä todennäköisyyttä, käytä mieluummin binomitodennäköisyyden kaavaa.
+ Jos laskeminen olisi muuten vaivalloista, voit käyttää \texttt{binomPdf}:ää tai vastaavaa.}\\
+ c) Tarkastellaan vielä b-kohdan oletuksen vakiotodennäköisyydestä jär\-ke\-vyyt\-tä. Jos 19 ensimmäistä ryhmään valittua helsinkiläistä oli alaikäisiä,
+ mikä on \emph{oikea} todennäköisyys sille, että myös kahdeskymmenes on? Kuinka paljon se eroaa a-kohdan todennäköisyydestä?
+\end{exercise}
+
+\begin{exercise}
+ Oletetaan, että Niinistöä kannattaa presidentiksi 62.6\% äänioikeutetuista.\footnote{Niinistö voitti tällä kannatuksella vaalit 2018, mutta
+ äänestysprosentti oli vain 66,7\%, joten tehtävän oletus on virheellinen. Se tekee laskemisesta kuitenkin paljon mukavampaa.}
+ Laiskassa vaaligallupissa valitaan satunnaisesti sata äänioikeutettua.
+ Millä todennäköisyydellä Niinistön kannatus on gallupissa a) tasan 63\% b) tasan 100\% c) vähintään 97 \% ? 
+\end{exercise}
+
+
+
+\section{LibreOffice Calcista}
+
+\begin{exercise}
+ Mitkä ovat hyviä hakusanoja LibreOffice Calcin käytön aloittamiseen? Kokeile niitä hakukoneeseen ja laita bookmarkkeihin parhaat.
+\end{exercise}
+
+\begin{exercise}
+\label{loex1}
+ Katso tehtävän asiat läpi, jos ne ovat sinulle jo entuudestaan tuttuja, älä turhaan näe vaivaa, vaan hyppää seuraavaan tehtävään.\\
+ 1)Tee seuraavanlainen tiedosto mielikuvitusoppilaiden pisteistä:
+ 
+ \includegraphics[width=10cm]{localc1.png}
+ 
+ Syötettyäsi numeron pystyt siirtymään alaspäin enterillä ja oikealla sarkaimella (Caps Lockin yläpuolella). 
+ 
+ 2) Klikkaa ruutua G2 ja maalaa vasemmalle ruutuun B2 asti:
+ 
+ \includegraphics[width=10cm]{localc2.png}
+ 
+ 3) Klikkaa ruutujen yläpuolella olevaa isoa sigmaa: $\Sigma$ . Mitä LibreOffice laski ruutuun G2?
+ 
+ \includegraphics[width=10cm]{localc3.png}
+ 
+ 4) Klikkaa ruutua G2. Ruudun oikeassa alakulmassa on pieni musta neliö. Tartu siihen hiirellä ja vedä neljä riviä alaspäin:
+ 
+ \includegraphics[width=10cm]{localc4.png}
+ 
+ 5. Tallenna tiedosto .ods- ja .csv-muodoissa: Kun olet klikannut ``save as'', aukeaa ikkuna, jossa voit valita tallennuspaikan, tiedoston nimen ja muodon.
+ Tiedoston muoto on todennäköisesti ikkunassa alhaalla save-napin yläpuolella, voit valita siitä ``text csv''. Jos siinä kohdassa lukee ``all formats''.
+ Voit päättää tiedoston muodon myös kirjoittamalla nimen päätteeksi ``.ods'' tai ``.csv'', esimerkiksi \texttt{mab8\_tehtava37.csv}.  
+ Tätä tiedostoa tullaan käyttämään seuraavissa tehtävissä.
+\end{exercise}
+
+
+\begin{exercise}
+ Katso tehtävän asiat läpi, jos ne ovat sinulle jo entuudestaan tuttuja, älä turhaan näe vaivaa, vaan hyppää seuraavaan tehtävään.\\
+ Avaa tehtävässä \ref{loex1} tehty .ods-muotoinen tiedosto.\\
+ a) Laske ruutuun G6 oppilaiden saamien kokonaispisteiden summa.\\
+ b) Laske ruutuun A6 oppilaiden määrä: \texttt{=COUNTA(A2:A5)}.\\
+ c) Laske ruutuun H6 oppilaiden kokonaispistemäärän keskiarvo: \texttt{=[jokin ruutu]/[jokin ruutu]}.\\
+ d) Laske ruutuun E6 kaikkien oppilaiden kaikkien tehtävien pistemäärä suoraan tehtäväruuduista: \texttt{=SUM(B2:E5)}.\\
+ e) Klikkaa ruutua E6, ota pienestä neliöstä sen vasemmassa alakulmassa kiinni ja vedä alaspäin. Mitä alapuolella oleviin ruutuihin tulee,
+ ja miksi? \\
+ f) Poista e-kohdan laskut ja laske ruutuun B6 summa kaikkien oppilaiden tehtävästä 1 saamista pisteistä. \\
+ g) Ota ruudusta B6 kiinni ja maalaa oikealle niin, että saat jokaiseen tehtävään yhteispistemäärän.\\
+ h) Laske ruutuun B7 ykköstehtävstä saatujen pisteiden keskiarvo tällä tavalla \texttt{=[jokin ruutu]/[jokin ruutu]} .\\
+ i) Ota ruudusta B7 kiinni ja maalaa oikealle, että saisit jokaisesta tehtävästä keskimääräiset pisteet. Miksi tämä ei toimi?\\
+ j) Muuta ruudun B7 sisällöksi \texttt{=B6/\$A\$6}, ota ruudusta kiinni ja maalaa oikealle. Katso ruutujen C7-E7 sisältöä.
+\end{exercise}
+
+\begin{exercise}
+\label{lolaatikko}
+ Avaa uusi dokumentti LibreOffice Calcissa ja kopioi siihen vasemmanpuoleinen kuva. Maalaa sitten ruudut A2 ja A3, tartu A3:n oikeassa alakulmassa
+ olevaan pieneen neliöön ja vedä alaspäin kunnes ruuduissa on numerot 0-10.
+ \begin{figure}[H]
+ \begin{center} 
+ \begin{minipage}{.45\textwidth}
+ \includegraphics[width=5cm]{localc5}
+ \end{minipage}
+ \begin{minipage}{.45\textwidth}
+ \includegraphics[width=5cm]{localc6}
+ \end{minipage}
+ \end{center}
+ \end{figure}
+ 
+ a) Ajatellaan koetta, jossa kolikkoa heitetään kymmenen kertaa. Kruunan todennäköisyys on 0.52. Laske ruutuun B2 binomitodennäköisyys nollalle
+    kruunalle. Älä kuitenkaan käytä funktion ensimmäisenä argumenttina lukua 0, vaan viittaa ruutuun A2 ilman dollareita.\\
+    
+ b) Ota ruudusta kiinni ja raahaa binomitodennäköisyydet ruutuihin B3-B12.
+ 
+ c) Montako kruunaa on todennäköisin tulos? Entä epätodennäköisin?
+ 
+ d) Laske binomitodennäköisyyksien summa ruutuun B13. Mitä saatu luku kertoo tehtävän ratkaisusta?
+\end{exercise}
+
+
+\begin{exercise}
+\label{kannatustehtava}
+ Oletetaan, että 62,6\% kaikista äänioikeutetuista äänestäisi Sauli Niinistöä, jos vaalit järjestettäisiin nyt.\\
+ a) Laiska gallupin tekijä kysyy sadalta satunnaiselta äänioikeutetulta, ketä he äänestäisivät. Millä todennäköisyydellä hän saa Niinistön kannatukseksi
+ 58\% -68\% (eli n. viiden prosenttiyksikön sisälle todellisesta kannatuksesta)?\\
+ b) Vielä laiskempi gallupin tekijä haastattelee vain kahtakymmentä sa\-tun\-nais\-ta äänioikeutettua. Millä todennäköisyydellä hän saa Niinistön kannatukseksi
+ 55\% - 70\%? \\
+ c) Iltapäivälehti kysyy nettisivuillaan lukijoilta, ketä he äänestäisivät presidentiksi. Tulosten mukaan Niinistö ei pääsisi edes toiselle kierrokselle.
+ Onko tämä vain huonoa onnea, vai kenties salaliitto?
+\end{exercise}
+
+
+\begin{exercise}
+ Alla on painotetun nopan todennäköisyydet. Laske oikeanpuoleiseen sarakkeeseen kertymäfunktio, eli todennäköisyydet, että
+ silmäluku on enintään $n.$\\
+ \begin{center}
+\begin{tabular}{l|l|l}
+Tulos &TN &Kertymäfunktio\\
+\hline
+1 &0.2&\\
+2 &0.1&\\
+3 &0.1&\\
+4 &0.3&\\
+5 &0.1&\\
+5 &0.2&
+\end{tabular}
+\end{center}
+\end{exercise}
+
+\begin{exercise}
+ Kolikko on reilu, eli kruuna ja klaava ovat yhtä todennäköiset. Sitä heitetään kymmenen kertaa. Laske todennäköisyys
+ saada a) enintään 7 kruunaa b) vähintään 2 kruunaa. 
+\end{exercise}
+
+\begin{exercise}
+Kolikonheitosta saadaan kruuna todennäköisyydellä 0.46. Millä todennäköisyydellä tuhannella heitolla saadaan
+a) enintään 400 kruunaa b) vähintään 400 kruunaa?
+\end{exercise}
+
+\begin{exercise}
+ Tutkijat pudottavat voileivän kaksisataa kertaa pöydältä lattialle, ja se putoaa 112 kertaa voipuoli alaspäin
+ (merkitään $n=112$).
+ Kokeen merkittävyyttä tarkastellaan vertaamalla sitä todennäköisyyteen saada tällainen tai äärimmäisempi tulos, jos 
+ eri päin putoaminen olisi yhtä todennäköistä. Käytännössä siis tutkijoiden pitää laskea todennäköisyys
+ $$P(n \leqq 88) + P(112\leqq n).$$
+ a) Laske tämä todennäköisyys\\
+ (Lisätietoa: tätä todennäköisyyttä sanotaan kokeen \emph{p-arvoksi}, kun nollahypoteesi on, että molemmin päin 
+ putoaminen on yhtä todennäköistä. Lukua $p=0.05$ pidetään yleensä tilastollisen merkittävyyden rajana. Lukua käytetään siksi, että ennen tietokoneaikaa
+  nämä asiat laskettiin käsin ja taulukoiden avulla, ja yleensä taulkoidut arvot olivat 0.05, 0.01 ja 0.001. Tämä luku siis on
+  jokseenkin mielivaltaisesti valittu).
+\end{exercise}
+
+\begin{exercise}
+Helsingin sanomien 22.-24. 1. 2018 teettämään galluppiin\footnote{\url{https://www.hs.fi/politiikka/art-2000005538817.html}} 
+vastasi 500 äänioikeutettua. Niinistö kannatus oli 58\% ja virhemarginaali 4,5 prosenttiyksikköä.\\
+a) Kuinka montaa galluppiin vastannutta prosenttimäärät 53,5\% ja 62,5\% vastaavat? (Älä pyöristä vielä lukuja)\\
+b) Oleta, että Niinistöä todellisuudessa kannatti 58\% äänioikeutetuista. Millä todennäköisyydellä hänen kannatus on 
+500 henkilön gallupissa ilmoitettujen virherajojen sisälpuolella? (Että kannatus olisi virherajojen sisäpuolella, sen on oltava suurempi
+kuin alaraja ja pienempi kuin yläraja. Valitse a-kohdan pyöristykset tämän perusteella)
+\end{exercise}
+
+
+
+\begin{exercise}
+ Oppilaan matematiikan arvosanat kursseilta MAB1-MAB7 ovat
+ $$6,\, 7,\, 8,\, 6,\, 8,\, 9,\, 6.$$
+ a) Mikä on hänen matematiikan keskiarvo tällä hetkellä?\\
+ b) Mikä arvosana hänen on saatava kurssista MAB8, että keskiarvo olisi tasan 7?\\
+ c) Loppuarvosana on kurssien keskiarvo pyöristettynä lähimpään kokonaislukuun (tasan 0.5-loppuinen ylöspäin).
+ Mitkä ovat oppilaan suurin ja pienin mahdollinen loppuarvosana MAB8:n jälkeen?
+\end{exercise}
+
+
+\begin{exercise}
+Esimerkissä 5.1 oppilas B sai arvosanat 8, 8, 7, 9, 8, 8, 9, 7. Laske hänen arvosanojensa keskihajonta.
+\end{exercise}
+
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/data1.csv} on kolme sarjaa mittaustuloksia (A, B ja C). 
+ Lataa tiedosto ja laske jokaisesta sarjasta keskiarvo ja keskihajonta. 
+ (Mittaussarjat ovat eri esineiden terminaalinopeuksia putoamisen aikana).
+ 
+ Huomaa, että tiedosto ei välttämättä aukea koneellasi oikein. Siinä tapauksessa kannattaa kysyä apua. Tiedoston saa helposti näkymään 
+ oikein, mutta ohjeita lukemalla se on vaikeaa. Tämä on myös osa tehtävää, sillä tosimaailmassa väärin aukeavat tiedostot ovat yleinen 
+ hankaluus, jonka kanssa kannattaa opetella tulemaan toimeen.
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/iris.csv} on Kurjenmiekkojen lehtien pituuksia ja leveyksiä.
+ Lataa tiedosto ja laske keskiarvo ja -hajonta a) setosa-lajin sepal\_widthille b) versicolorin petal\_lengthille. (Mitat ovat senttimetrejä)
+\end{exercise}
+
+
+
+\begin{exercise}
+Kahvipaketteissa on keskimäärin 500 grammaa kahvia. Laitteiston epätarkkuuden vuoksi paketin massan keskihajonta on 3 grammaa.
+Millä todennäköisyydellä satunnaisessa kahvipaketissa on 500-506 grammaa kahvia?
+\end{exercise}
+
+\begin{exercise}
+ Ihmisten älykkyysosamäärän keskiarvo on 100 ja keskihajonta 15.\footnote{ÄO on periaatteessa määritelty näin.}\\
+ a) Millä todennäköisyydellä satunnaisesti valitun henkilön ÄO on 85-130?\\
+ b) Joskus ÄO:n keskihajonnaksi on valittu 24. Jos henkilön ÄO on 130 keskihajonnalla 15, mikä se olisi keskihajonnalla 24?
+\end{exercise}
+
+
+ 
+\begin{exercise}
+ Kahvipaketin massa on normaalijakautunut. Sen keskiarvo on 500 grammaa ja keskihajonta 3 grammaa.\\
+ a) Millä todennäköisyydellä satunnaisessa kahvipaketissa on alle 495 g kahvia?\\
+ b) Millä todennäköisyydellä satunnaisessa kahvipaketissa on yli 510 g kahvia?\\
+ c) Kuluttajan vaaka näyttää arvoa 500 g, jos paketin todellinen massa on 499.5-500.5 grammaa. Millä todennäköisyydellä näin käy?
+\end{exercise}
+
+\begin{exercise}
+ Kurjenmiekan terälehden pituus on normaalijakautunut. Sen keskiarvo on 3.8 cm ja keskihajonta 0.5 cm. \\
+ a) Millä todennäköisyydellä satunnaisen terälehden pituus on alle 2 cm?\\
+ b) Millä todennäköisyydellä satunnaisen terälehden pituus on 4-5 cm?
+\end{exercise}
+
+\begin{exercise}
+ Kurjenmiekan terälehden pituus on normaalijakautunut. Sen keskiarvo on 3.8 cm ja keskihajonta 0.5 cm. \\
+ a) Anni kertää kymmenen satunnaista kurjenmiekan terälehteä. Millä todennäköisyydellä ne ovat kaikki alle 4.5 cm pitkiä?\\
+ b) Benjamin kerää kaksikymmentä satunnaista terälehteä. Millä todennäköisyydellä hän saa ainakin yhden kuusisenttisen?
+\end{exercise}
+
+\begin{exercise}
+  Maitotölkin massa on normaalijakautunut keskiarvolla 1000 grammaa ja keskihajonnalla 4 grammaa.\\
+  a) Kuinka painava tölkin on oltava ollakseen painavimmassa promillessa kaikista tölkeistä?\\
+  b) Millä todennäköisyydellä tällainen tölkki on tuhannen satunnaisen tölkin joukossa?\\
+  c) Minkä painon tölkittäjä voi ilmoittaa vähimmäispainoksi, jos halutaan, että alle prosentti tölkeistä on sitä kevyempiä?
+\end{exercise}
+
+\begin{exercise}
+  Ovien valmistaja haluaa, että alle miljoonasosa ihmisistä joutuu kumartumaan kulkiessaan heidän ovistaan. Jos ihmisten keskipituus on
+  175 cm ja keskihajonta 8.5 cm, kuinka korkeita ovien pitää olla?
+\end{exercise}
+
+
+\section{Tilastotiedettä}
+
+
+
+
+\begin{exercise}
+ Kuuluuko \href{https://fi.wikipedia.org/wiki/Antti_Tuisku}{Antti Tuisku} populaatioon, kun tutkitaan\\
+ a) puoluekannatusta eduskuntavaaleissa 2019\\
+ b) ruotsalaisten keskipituutta\\
+ c) Euroopan nisäkkäiden elinikää\\
+ d) tilastotieteilijöiden työllisyysastetta.
+\end{exercise}
+
+
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/vpjapituus.csv} on tiedosto, jossa on yläverenpaine ja pituus pieneltä otokselta
+ aikuisia suomalaisia. \\
+ a) Määritä tiedostosta uskottavin arvo suomalaisten aikuisten yläveren\-paineelle ja pituudelle.\\
+ b) Miksi nämä eivät ole uskottavimpia arvoja kaikkien suomalaisten yläverenpaineelle ja pituudelle?
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/gallup.csv} on satunnaisesti generoitu galluptutkimus presidentinvaaleihin 
+ 2019.\footnote{Vastaukset on arvottu vaalien todellisen äänten perusteella koneellisesti.} Listassa 0 tarkoittaa, että vastaaja ei äänestäisi,
+ ja muulloin numero on sen ehdokkaan numero, jota hän äänestäisi.\\ 
+ a) Laske uskottavin arvo äänestysprosentille. Nollat on helppo laskea näin: \texttt{=COUNTIF(A1:A45, ``=0'')}\\
+ b) Laske uskottavin arvo Niinistön (8) kannatukselle. Huomaa, että kannatus lasketaan prosenttina äänestäneistä, ei äänioikeutetuista.\\
+ c) Laske uskottavin arvo Haaviston (3) kannatukselle.
+\end{exercise}
+
+
+
+
+\begin{exercise}
+ Tutkija yrittää selvittää norjalaisten aikuisten keski\-pituutta. Hän valitsee satunnaisen otoksen ja saa mitat
+ $$179, 174, 171, 169, 172, 148 \text{ ja } 171 \text{ cm.} $$
+ Mikä on hänen ennusteensa norjalaisten aikuisten pituudelle ja sen keskihajonnalle?
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/iris.csv} on Kurjenmiekkojen mittoja. Laske uskottavin arvo versicolor-lajikkeen terälehden
+ leveydelle (petal\_width) ja sen otoskeskihajonta.
+\end{exercise}
+
+
+
+
+\begin{exercise}
+ Suomalaisten aikuisten yläverenpainetta tutkitaan 50 henkilön otoksella, jossa keskiarvo yläpaineelle on 143.84 mmHg ja keskihajonta 25.77 mmHg.
+ Mikä on 95\%:n luottamusväli tutkimuksen mukaan?
+\end{exercise}
+
+
+\begin{exercise}
+ Etsi MAOLin taulukoista luottamusvälit ja laske edelliseen tehtävään 99.9\%:n luottamusväli.
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/pituuksia.csv} on otos amerikkalaisten aikuisten pituuksia. Laske sen perusteella\\
+ a) 95 \%:n luottamusväli amerikkalaisten aikuisten keskipituudelle\\
+ b) 99\%:n luottamusväli amerikkalaisten aikuisten keskipituudelle.
+\end{exercise}
+
+
+
+
+\begin{exercise}
+ Vaaligallupissa haastateltiin tuhatta satunnaisesti valittua äänoikeutettua. Heistä 712 sanoi aikovansa äänestää.
+ Mikä on gallupin perusteella 95\% luottamusväli
+ vaalien äänestysprosentille?
+\end{exercise}
+
+\begin{exercise}
+ Osoitteessa \url{https://www.cs.helsinki.fi/u/mokangas/mab8/gallup2.csv} on koneellisesti arvottu vaaligallup presidentinvaaleista 2018.
+ Luku 0 tarkoittaa hylättyä ääntä ja muut numerot ehdokkaiden numeroita. Laske 95\%:n luottamusväli Haataisen (6) ja Vanhasen (4) kannatuksille. 
+ Oliko heidän todellinen kannatus luottamusvälillä? Käytä apuna sivua \url{https://fi.wikipedia.org/wiki/Suomen_presidentinvaali_2018}
+ Laske hylätty ääni mukaan kokonaisäänimäärään.
+\end{exercise}
+
+
+\begin{exercise}
+ Osoitteessa \url{https://www.vauva.fi/keskustelu/3080040/eduskuntavaali-2019-gallup} kysytään, mitä puoluetta 
+ korkea\-tasoi\-ses\-ta keskustelusta tunnetun Vauva-lehden lukijat aikovat äänestää eduskuntavaaleissa 2019.
+ Klikkaa ``näytä vastaukset'' vaihtoehtojen alapuolella nähdäksesi tulokset.\\
+ a) Mikä puolue olisi kyselyn perusteella vaalien jälkeen eduskunnan suurin?\\
+ b) Mikä on 95\%:n luottamusväli puolueen kannatukselle?\\
+ c) Onko a- ja b-kohdan ennusteet päteviä? Miksi/miksi ei?
+\end{exercise}
+
+
+\section{Lisätehtäviä}
+
+Kaikki nämä ovat vanhoja matematiikan yo-tehtäviä. Tehtävät eivät ole missään erityisessä järjestyksessä.
+
+\begin{exercise}
+ (Syksy 17, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex1.png}
+\end{exercise}
+
+
+\begin{exercise}
+ (Kevät 16, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex2.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 16, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex3.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 11, pitkä. Voi olla vaikea)
+ 
+ \includegraphics[width=10cm]{ex4.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 10, pitkä)
+ 
+ \includegraphics[width=10cm]{ex5.png}
+\end{exercise}
+
+
+\begin{exercise}
+ (Kevät 08, pitkä)
+ 
+ \includegraphics[width=10cm]{ex6.png}
+\end{exercise}
+
+
+\begin{exercise}
+ (Kevät 03, pitkä. Ekassa kysymyksessä pitää ajatella ehdollisia todennäköisyyksiä.)
+ 
+ \includegraphics[width=10cm]{ex7.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 01, pitkä)
+ 
+ \includegraphics[width=10cm]{ex8.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 01, pitkä)
+ 
+ \includegraphics[width=10cm]{ex9.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 99, pitkä)
+ 
+ \includegraphics[width=10cm]{ex10.png}
+\end{exercise}
+
+\begin{exercise}
+ (Syksy 12, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex11.png}
+\end{exercise}
+
+\begin{exercise}
+ (Kevät 12, lyhyt)
+ 
+ \includegraphics[width=10cm]{ex12.png}
+\end{exercise}
+
+\textsc{Odotusarvot}
+
+\begin{exercise}
+ Heität noppaa 600 kertaa. Mikä on kutosten lukumäärän odotusarvo?
+\end{exercise}
+
+\begin{exercise}
+ Pelaat peliä, jossa heitetään noppaa. Voitat parillisilla silmäluvuilla silmäluvun verran euroissa ja parittomilla häviät 
+ kolme euroa. Onko peli sinulle kannattava?
+\end{exercise}
+
+
+\begin{exercise}
+ Henkilö pelaa Monopolia. Hän heittää kahta noppaa. Silmäluvuilla 7 hän joutuu Mannerheimintielle ja joutuu maksamaan 24 000 pelirahaa. Silmäluvulla
+ 9 hän joutuu Erottajalle ja maksaa 40 000 pelirahaa. Silmäluvulla 10 ja suuremmilla hän ylittää lähtöruudun ja saa 4000 pelirahaa. Muussa tapauksessa
+ hän ei saa eikä menetä rahaa. Mikä on rahan saamisen
+ odotusarvo?
+ 
+\end{exercise}
+\end{document}
+
